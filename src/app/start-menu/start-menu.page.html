@@ -1,0 +1,24 @@
+<ion-content [fullscreen]="true">
+  
+
+  <ion-grid id="menu-grid">
+
+    <div id="logo_div">
+      <img src="../../assets/title.png" id="main-logo">
+    </div>
+
+    <ion-row>
+
+      <div class="menu-button"> <!-- Boton para dirigirse a la pagina de creacion de personajes-->
+        <h1>Characters</h1>
+      </div>
+
+      <div class="menu-button" (click)="movePage()"> <!-- Boton para dirigirse a la pagina de juego-->
+        <h1>Play</h1>
+      </div>
+
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>

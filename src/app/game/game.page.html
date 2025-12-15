@@ -1,0 +1,33 @@
+<ion-content [fullscreen]="true">
+  <title>Dungeo</title>
+
+  <div id="characterinfo-div">
+        <h2 class="characterinfo-text">Vida: {{this.playerStats.vida}}</h2>
+        <h2 class="characterinfo-text">Fuerza: {{this.playerStats.fuerza}}</h2>
+        <h2 class="characterinfo-text">Agilidad: {{this.playerStats.agilidad}}</h2>
+        <h2 class="characterinfo-text">Suerte: {{this.playerStats.suerte}}</h2>
+  </div>
+
+  <ion-grid>
+    <ion-row>
+      
+    </ion-row>
+
+    <ion-row id="game-col">
+      <div id="ia_box">
+        <a *ngFor="let response of response">
+          {{response}}
+        </a>
+      </div>
+      <br>
+      <br>
+      <div class="options-box">
+        <ion-button class="option-button" id="button-a" (click)="sendPromptResponse('A')">A</ion-button>
+        <ion-button class="option-button" id="button-b" (click)="sendPromptResponse('B')">B</ion-button>
+        <ion-button class="option-button" id="button-c" (click)="sendPromptResponse('C')">C</ion-button>
+      </div>
+    </ion-row>
+
+    <ion-row></ion-row>
+  </ion-grid>
+</ion-content>
