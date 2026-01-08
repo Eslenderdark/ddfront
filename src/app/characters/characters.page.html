@@ -1,13 +1,41 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>characters</ion-title>
+    <ion-title>Characters</ion-title>
+  
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">characters</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <ion-button (click)="movePage()">Menu</ion-button>
+  
+  <!-- Contenedor en grid para futuras tarjetas -->
+  <ion-grid>
+    <ion-row>
+
+      <!-- Card: Crear personaje -->
+      <ion-col size="6" size-md="3">
+        <ion-card button class="create-card">
+          <ion-card-content class="create-card-content">
+            <ion-icon name="add-circle-outline" class="create-icon"></ion-icon>
+            <p>Create Character</p>
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+
+      <!-- AQUÍ irán los personajes creados en el futuro -->
+      <!--
+      <ion-col size="6" size-md="3">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Nombre</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+      -->
+
+    </ion-row>
+  </ion-grid>
+
 </ion-content>
