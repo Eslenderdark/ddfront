@@ -1,0 +1,41 @@
+
+.create-card {
+  height: 240px;
+  width: 180px;
+
+  background-color: #ffffff;
+  color: #ff7d00;
+
+  display: flex;
+
+  box-shadow:
+    0px 0px 0px 4px #df7126,
+    0px 4px 0px 4px #b65310;
+
+  cursor: pointer;
+  transition: transform 0.05s ease-in-out;
+
+}
+
+.create-card:active {
+  transform: translateY(6px);
+  box-shadow:
+    0px 0px 0px 4px #df7126,
+    0px 2px 0px 4px #b65310;
+}
+
+.create-card-content {
+  text-align: center;
+}
+
+.create-icon {
+  font-size: 50px;
+  margin-bottom: 12px;
+}
+
+/* Texto */
+.create-card p {
+  margin: 0;
+  font-family: 'Daydream', system-ui, sans-serif;
+  font-size: 14px;
+}
