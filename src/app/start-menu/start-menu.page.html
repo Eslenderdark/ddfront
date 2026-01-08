@@ -1,9 +1,8 @@
 <ion-content [fullscreen]="true">
 
   <div style="position: absolute; top: 10px; right: 10px; z-index: 100;">
-    @if (isLogged){
+
     <ion-button *ngIf="isLogged" (click)="logout()" size="small" color="danger">LogOut</ion-button>
-    }
     <ion-button *ngIf="!isLogged" (click)="login()" size="small">LogIn</ion-button>
   </div>
 
