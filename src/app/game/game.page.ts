@@ -19,12 +19,12 @@ export class GamePage implements OnInit {
   public url_host = 'http://localhost:3000/' // URL del host del servidor backend
   public response: any[] = [];// Array de las respuestas del servidor
   public playerStats = {
-    player_id: '', // lo recibimos, de momento lo dejamos vacío
-    descripcion: '', // lo mismo
-    vida: '100',
-    fuerza: '100',
-    agilidad: '100',
-    suerte: '100',
+    id: '', // lo recibimos, de momento lo dejamos vacío
+    description: '', // lo mismo
+    hp: '100',
+    strength: '100',
+    agility: '100',
+    luck: '100',
     alive: 'true',
     run: 0,
   }
@@ -44,12 +44,12 @@ export class GamePage implements OnInit {
     this.http.get(this.url_host + 'geminiresponse/' + letterOption).subscribe((response: any) => { // LetterOption es la respuesta del usuario
       console.log('Respuesta: ' + JSON.stringify(response))
       this.playerStats = {
-        player_id: '', // lo recibimos, de momento lo dejamos vacío
-        descripcion: '', // lo mismo
-        vida: response.vida,
-        fuerza: response.fuerza,
-        agilidad: response.agilidad,
-        suerte: response.suerte,
+        id: '', // lo recibimos, de momento lo dejamos vacío
+        description: '', // lo mismo
+        hp: response.vida,
+        strength: response.fuerza,
+        agility: response.agilidad,
+        luck: response.suerte,
         alive: response.alive,
         run: response.run,
       }
