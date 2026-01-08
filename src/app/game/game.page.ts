@@ -46,10 +46,10 @@ export class GamePage implements OnInit {
       this.playerStats = {
         id: '', // lo recibimos, de momento lo dejamos vacío
         description: '', // lo mismo
-        hp: response.vida,
-        strength: response.fuerza,
-        agility: response.agilidad,
-        luck: response.suerte,
+        hp: response.hp,
+        strength: response.strength,
+        agility: response.agility,
+        luck: response.luck,
         alive: response.alive,
         run: response.run,
       }
