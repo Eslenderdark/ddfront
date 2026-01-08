@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-market',
@@ -12,9 +13,16 @@ import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/stan
 })
 export class MarketPage implements OnInit {
 
-  constructor() { }
-
+  constructor(private http: HttpClient) { }
+public apibdd:any = "";
+public itemsMarket:any []=[];
   ngOnInit() {
+    this.getItemsMarket()
   }
-
+getItemsMarket() {
+  this.http.get<any[]>(`${this.apibdd}/itemsmarket`)
+    .subscribe(response => {
+      this.itemsMarket = response;
+    });
+}
 }
