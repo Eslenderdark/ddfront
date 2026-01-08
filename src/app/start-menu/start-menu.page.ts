@@ -19,8 +19,8 @@ export class StartMenuPage implements OnInit {
 
   }
 
-  async movePage() { // Funcion para movernos a la pagina de juego
-    console.log('Moving to page: ');
-    this.route.navigate(['/game']);
+ goTo(page: string) {
+    console.log('Moving to:', page);
+    this.route.navigate(['/' + page]);
   }
 }

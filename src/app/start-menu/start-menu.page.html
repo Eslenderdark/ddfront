@@ -1,5 +1,4 @@
 <ion-content [fullscreen]="true">
-  
 
   <ion-grid id="menu-grid">
 
@@ -9,11 +8,31 @@
 
     <ion-row>
 
-      <div class="menu-button"> <!-- Boton para dirigirse a la pagina de creacion de personajes-->
-        <h1>Characters</h1>
+      <div class="menu-button" (click)="goTo('inventory')">
+        <h1>Inventory</h1>
       </div>
 
-      <div class="menu-button" (click)="movePage()"> <!-- Boton para dirigirse a la pagina de juego-->
+      <div class="menu-button" (click)="goTo('market')">
+        <h1>Market</h1>
+      </div>
+
+      <div class="menu-button" (click)="goTo('ranking')">
+        <h1>Ranking</h1>
+      </div>
+
+    </ion-row>
+
+    <ion-row>
+
+      <div class="menu-button" (click)="goTo('item-shop')">
+        <h1>Item Shop</h1>
+      </div>
+
+      <div class="menu-button" (click)="goTo('login')">
+        <h1>Login</h1>
+      </div>
+
+      <div class="menu-button" (click)="goTo('game')">
         <h1>Play</h1>
       </div>
 
