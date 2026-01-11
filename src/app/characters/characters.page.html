@@ -6,8 +6,6 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
-  <ion-button (click)="movePage()">Menu</ion-button>
-
   <ion-grid>
     <ion-row>
 
@@ -21,13 +19,32 @@
         </ion-card>
       </ion-col>
 
+      <!-- LISTADO DE PERSONAJES -->
+      <ion-col size="6" size-md="3" *ngFor="let character of characters">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{ character.name }}</ion-card-title>
+            <ion-card-subtitle>Level {{ character.level }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <p>❤️ HP: {{ character.hp }}</p>
+            <p>💪 STR: {{ character.strength }}</p>
+            <p>⚡ AGI: {{ character.agility }}</p>
+            <p>🍀 LUCK: {{ character.luck }}</p>
+
+            <!-- Botón para iniciar juego solo si está vivo -->
+            <ion-button *ngIf="character.alive" (click)="startGame(character)">
+              Play
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
     </ion-row>
   </ion-grid>
 
   <!-- MODAL CREATE CHARACTER -->
   <ion-modal [isOpen]="isCreateModalOpen" (didDismiss)="closeCreateModal()">
     <ng-template>
-
       <ion-header>
         <ion-toolbar>
           <ion-title>New Character</ion-title>
@@ -39,17 +56,12 @@
 
       <ion-content class="ion-padding">
 
-        <!-- Nombre -->
         <ion-item>
           <ion-label position="stacked">Name</ion-label>
-          <ion-input
-            [(ngModel)]="newCharacter.name"
-            maxlength="20"
-            placeholder="Character name">
+          <ion-input [(ngModel)]="newCharacter.name" maxlength="20" placeholder="Character name">
           </ion-input>
         </ion-item>
 
-        <!-- Raza del personaje -->
         <ion-item>
           <ion-label position="stacked">Race</ion-label>
           <ion-select [(ngModel)]="newCharacter.race">
@@ -60,25 +72,21 @@
           </ion-select>
         </ion-item>
 
-        <!-- STATS -->
         <ion-item>
           <ion-label>Strength: {{ newCharacter.stats.strength }}</ion-label>
-          <ion-range min="1" max="10" step="1" snaps="true"
-            [(ngModel)]="newCharacter.stats.strength">
+          <ion-range min="1" max="10" step="1" snaps="true" [(ngModel)]="newCharacter.stats.strength">
           </ion-range>
         </ion-item>
 
         <ion-item>
           <ion-label>Agility: {{ newCharacter.stats.agility }}</ion-label>
-          <ion-range min="1" max="10" step="1" snaps="true"
-            [(ngModel)]="newCharacter.stats.agility">
+          <ion-range min="1" max="10" step="1" snaps="true" [(ngModel)]="newCharacter.stats.agility">
           </ion-range>
         </ion-item>
 
         <ion-item>
           <ion-label>Health: {{ newCharacter.stats.health }}</ion-label>
-          <ion-range min="50" max="200" step="10" snaps="true"
-            [(ngModel)]="newCharacter.stats.health">
+          <ion-range min="50" max="200" step="10" snaps="true" [(ngModel)]="newCharacter.stats.health">
           </ion-range>
         </ion-item>
 
@@ -87,7 +95,6 @@
         </ion-button>
 
       </ion-content>
-
     </ng-template>
   </ion-modal>
 
