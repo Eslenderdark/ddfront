@@ -1,9 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { IonicModule } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector:'app-inventory',
   templateUrl:'./inventory.page.html',
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+  ],
   styleUrls:['./inventory.page.scss']
 })
 export class InventoryPage implements OnInit{
