@@ -1,5 +1,10 @@
 <ion-content [fullscreen]="true">
-  
+
+  <div style="position: absolute; top: 10px; right: 10px; z-index: 100;">
+
+    <ion-button *ngIf="isLogged" (click)="logout()" size="small" color="danger">LogOut</ion-button>
+    <ion-button *ngIf="!isLogged" (click)="login()" size="small">LogIn</ion-button>
+  </div>
 
   <ion-grid id="menu-grid">
 
@@ -7,14 +12,36 @@
       <img src="../../assets/title.png" id="main-logo">
     </div>
 
-    <ion-row>
+    <!-- FILA SUPERIOR -->
+    <ion-row class="menu-row">
 
-      <div class="menu-button"> <!-- Boton para dirigirse a la pagina de creacion de personajes-->
-        <h1>Characters</h1>
+      <div class="menu-button" (click)="goTo('inventory')">
+        <h1>Inventory</h1>
       </div>
 
-      <div class="menu-button" (click)="movePage()"> <!-- Boton para dirigirse a la pagina de juego-->
-        <h1>Play</h1>
+      <div class="menu-button" (click)="goTo('market')">
+        <h1>Market</h1>
+      </div>
+
+      <div class="menu-button" (click)="goTo('ranking')">
+        <h1>Ranking</h1>
+      </div>
+
+    </ion-row>
+
+    <!-- FILA INFERIOR -->
+    <ion-row class="menu-row">
+
+      <div class="menu-button" (click)="goTo('item-shop')">
+        <h1>Item Shop</h1>
+      </div>
+
+      <div class="menu-button" (click)="goTo('login')">
+        <h1>Login</h1>
+      </div>
+
+      <div class="menu-button" (click)="goTo('characters')">
+        <h1>Characters</h1>
       </div>
 
     </ion-row>

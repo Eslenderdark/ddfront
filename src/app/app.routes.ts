@@ -25,5 +25,17 @@ export const routes: Routes = [
     path: 'characters',
     loadComponent: () => import('./characters/characters.page').then( m => m.CharactersPage)
   },
+  {
+    path: 'login',
+    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+  },
+  {
+    path: 'ranking',
+    loadComponent: () => import('./ranking/ranking.page').then( m => m.RankingPage)
+  },
+  {
+    path: 'item-shop',
+    loadComponent: () => import('./item-shop/item-shop.page').then( m => m.ItemShopPage)
+  },
 
 ];

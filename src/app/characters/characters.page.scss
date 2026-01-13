@@ -1,0 +1,157 @@
+/* =========================== */
+/* TARJETA CREATE CHARACTER (igual que antes) */
+.create-card {
+  height: 240px;
+  width: 180px;
+
+  background-color: #ffffff;
+  color: #ff7d00;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  box-shadow:
+    0px 0px 0px 4px #df7126,
+    0px 4px 0px 4px #b65310;
+
+  cursor: pointer;
+  transition: transform 0.05s ease-in-out, box-shadow 0.05s ease-in-out;
+}
+
+.create-card:active {
+  transform: translateY(6px);
+  box-shadow:
+    0px 0px 0px 4px #df7126,
+    0px 2px 0px 4px #b65310;
+}
+
+.create-card-content {
+  text-align: center;
+}
+
+.create-icon {
+  font-size: 50px;
+  margin-bottom: 12px;
+}
+
+/* Texto */
+.create-card p {
+  margin: 0;
+  font-family: 'Daydream', system-ui, sans-serif;
+  font-size: 14px;
+}
+
+/* =========================== */
+/* TARJETAS DE PERSONAJES */
+ion-col ion-card {
+  height: 240px;
+  width: 180px;
+  background-color: #ffffff; /* Blanco como la tarjeta create */
+  color: #ff7d00;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  box-shadow:
+    0px 0px 0px 4px #df7126,
+    0px 4px 0px 4px #b65310;
+
+  border-radius: 0; /* Igual que create-card */
+  transition: transform 0.05s ease-in-out, box-shadow 0.05s ease-in-out;
+  cursor: pointer;
+}
+
+ion-col ion-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0px 0px 0px 4px #df7126,
+    0px 6px 0px 4px #b65310;
+}
+
+ion-card-header {
+  text-align: center;
+  padding: 8px;
+}
+
+ion-card-title {
+  font-family: 'Daydream', system-ui, sans-serif;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+ion-card-subtitle {
+  font-size: 12px;
+  color: #b65310; /* un naranja más oscuro para subtítulos */
+}
+
+/* Stats dentro de la tarjeta */
+ion-card-content p {
+  font-size: 12px;
+  margin: 2px 0;
+  text-align: left;
+  padding-left: 8px;
+}
+
+/* Botón Play estilo menú */
+ion-card-content ion-button {
+  width: 100%;
+  --background: #ff7d00;
+  --color: white;
+  --border-radius: 0;
+
+  box-shadow:
+    0px 0px 0px 4px #df7126,
+    0px 4px 0px 4px #b65310;
+
+  cursor: pointer;
+  transition: transform 0.05s ease-in-out, box-shadow 0.05s ease-in-out;
+}
+
+ion-card-content ion-button:active {
+  transform: translateY(6px);
+  box-shadow:
+    0px 0px 0px 4px #df7126,
+    0px 2px 0px 4px #b65310;
+}
+
+/* =========================== */
+/* MODAL - CREAR PERSONAJE */
+ion-modal ion-item {
+  margin-bottom: 12px;
+}
+
+ion-modal ion-label {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+ion-modal ion-range {
+  --bar-background-active: #ff7d00;
+  --bar-background: #ffc68c;
+  --handle-background: #ff7d00;
+}
+
+/* Botón crear personaje dentro del modal */
+ion-modal ion-button {
+  --background: #ff7d00;
+  --color: white;
+  border-radius: 0;
+  margin-top: 8px;
+
+  box-shadow:
+    0px 0px 0px 4px #df7126,
+    0px 4px 0px 4px #b65310;
+
+  cursor: pointer;
+  transition: transform 0.05s ease-in-out, box-shadow 0.05s ease-in-out;
+}
+
+ion-modal ion-button:active {
+  transform: translateY(6px);
+  box-shadow:
+    0px 0px 0px 4px #df7126,
+    0px 2px 0px 4px #b65310;
+}
