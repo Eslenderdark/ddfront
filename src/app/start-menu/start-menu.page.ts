@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonGrid, IonCol, IonRow, IonButton } from '@ionic/angular/standalone';
+import { IonContent, IonGrid, IonRow, IonButton } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { AuthService } from '@auth0/auth0-angular';
 import { HttpClient } from '@angular/common/http';
@@ -12,7 +12,7 @@ import { DOCUMENT } from '@angular/common';
   templateUrl: './start-menu.page.html',
   styleUrls: ['./start-menu.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonGrid, IonCol, IonRow, IonButton]
+  imports: [IonContent, CommonModule, FormsModule, IonGrid, IonRow, IonButton]
 })
 export class StartMenuPage implements OnInit {
 
@@ -41,7 +41,8 @@ export class StartMenuPage implements OnInit {
       const payload = {
         id: data.email,
         name: data.name,
-        coins: 0
+        coins: 0,
+        xp: 0
       };
 
 
@@ -58,7 +59,7 @@ export class StartMenuPage implements OnInit {
     });
   }
 
- goTo(page: string) {
+  goTo(page: string) {
     console.log('Moving to:', page);
     this.route.navigate(['/' + page]);
   }
