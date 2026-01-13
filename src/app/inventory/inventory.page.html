@@ -1,13 +1,47 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>inventory</ion-title>
+    <ion-title>Inventario</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">inventory</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+
+<div class="inventory-grid">
+
+  <div class="item-card" *ngFor="let item of items">
+
+    <img [src]="item.image" class="item-img">
+
+    <div class="item-name">{{item.name}}</div>
+    <div class="item-rarity">{{item.rarity}}</div>
+    <div class="item-desc">{{item.description}}</div>
+
+    <ion-select placeholder="Asignar"
+      (ionChange)="assignItem(item,$event.detail.value)">
+      <ion-select-option 
+        *ngFor="let c of characters"
+        [value]="c.id">
+        {{c.name}}
+      </ion-select-option>
+    </ion-select>
+
+    <button class="action-btn"
+      (click)="sellItem(item)">
+      Vender ({{getSellPrice(item.rarity)}}💰)
+    </button>
+
+    <ion-input type="number"
+      placeholder="Precio mercado"
+      [(ngModel)]="item.marketPrice">
+    </ion-input>
+
+    <button class="action-btn"
+      (click)="publishMarket(item)">
+      Mercado
+    </button>
+
+  </div>
+
+</div>
+
 </ion-content>
