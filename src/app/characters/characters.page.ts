@@ -129,6 +129,7 @@ export class CharactersPage implements OnInit {
       });
 
   }
+
   loadCharacters() {
     if (!this.userId) return;
 
@@ -142,6 +143,7 @@ export class CharactersPage implements OnInit {
         }
       });
   }
+
   startGame(character: CharacterPayload) {
     if (!character) return;
 
@@ -151,10 +153,28 @@ export class CharactersPage implements OnInit {
     // Llamamos al backend para generar la narrativa inicial
     const selectedCharacter = JSON.parse(localStorage.getItem('selectedCharacter')!);
 
+
+    // Hacer que haga primero el get de /characterplay/:charid del backend <--- para obtener el jugador seleccionado 
+
+    this.http.get<{ character: CharacterPayload }>(`${this.host_url}/characterplay/${character.user_id}`)
+      .subscribe({
+        next: (res) => {
+          console.log('Personaje para jugar:', res.character);
+          localStorage.setItem('selectedCharacter', JSON.stringify(res.character));
+          this.generateInitialNarrative(res.character);
+        },
+        error: (err) => {
+          console.error('Error al obtener personaje para jugar:', err);
+        }
+      });
+  }
+
+  generateInitialNarrative(selectedCharacter: CharacterPayload) {
+
     this.http.post(`${this.host_url}/gemini`, { character: selectedCharacter })
       .subscribe({
         next: (res: any) => {
-          console.log('Narrativa inicial:', res.response); 
+          console.log('Narrativa inicial:', res.response);
           localStorage.setItem('gameNarrative', JSON.stringify(res));
           this.router.navigate(['/game']);
         },
