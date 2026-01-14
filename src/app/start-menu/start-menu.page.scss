@@ -1,6 +1,30 @@
-ion-grid{
-    background-color: white;
+ion-grid {
+  background-color: #1a1a1a;
+
+  /* Patrón de rejilla tipo tiles */
+  background-image: 
+    repeating-linear-gradient(0deg, #222 0 2px, transparent 2px 20px),
+    repeating-linear-gradient(90deg, #222 0 2px, transparent 2px 20px);
+
+  /* Animación sutil de movimiento de luz */
+  animation: dungeon-pulse 10s infinite alternate;
+  background-size: 20px 20px; /* tamaño de los tiles */
 }
+@keyframes dungeon-pulse {
+  0% {
+    background-position: 0 0, 0 0;
+    filter: brightness(0.7);
+  }
+  50% {
+    background-position: 5px 5px, -5px -5px;
+    filter: brightness(1.2);
+  }
+  100% {
+    background-position: 10px 10px, -10px -10px;
+    filter: brightness(0.8);
+  }
+}
+
 
 ion-row{
     width: 100%;
@@ -67,5 +91,49 @@ ion-row{
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 6%;
+  margin-top: 10%;
+}
+
+
+.menu-row1 {
+  margin-top: 3%;
+}
+
+.menu-button.disabled {
+  position: relative;
+  background-color: #b0b0b0;
+  color: #666666;
+
+  box-shadow:
+    0px 0px 0px 4px #8a8a8a,
+    0px 8px 0px 4px #5f5f5f;
+
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(100%);
+}
+
+/* Texto Coming Soon */
+.menu-button.disabled .coming-soon {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  font-size: 60%;
+  font-family: 'Daydream', system-ui, sans-serif;
+  color: #333;
+
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 4px 8px;
+
+  border: 2px solid #555;
+  box-shadow: 2px 2px 0px #333;
+
+  pointer-events: none;
+}
+
+/* Evita animación de pulsado */
+.menu-button.disabled:active {
+  transform: none;
 }

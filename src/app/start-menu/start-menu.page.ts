@@ -59,6 +59,14 @@ export class StartMenuPage implements OnInit {
     });
   }
 
+  handleAuth() {
+    if (this.isLogged) {
+      this.logout();
+    } else {
+      this.login();
+    }
+  }
+
   goTo(page: string) {
     console.log('Moving to:', page);
     this.route.navigate(['/' + page]);

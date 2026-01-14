@@ -18,18 +18,17 @@ import { addCircleOutline } from 'ionicons/icons';
 addIcons({ addCircleOutline });
 
 interface CharacterPayload {
+  id?: number;
   name: string;
   hp: number;
   strength: number;
   agility: number;
   luck: number;
-  level: number;
-  next_level_xp: number;
-  current_level_xp: number;
   alive: boolean;
   run: boolean;
   state: any;
   user_id: string;
+  xp: number;
 }
 
 @Component({
@@ -97,38 +96,44 @@ export class CharactersPage implements OnInit {
       strength: this.newCharacter.stats.strength,
       agility: this.newCharacter.stats.agility,
       luck: 1,
-      level: 1,
-      next_level_xp: 100,
-      current_level_xp: 0,
       alive: true,
       run: false,
       state: {
         race: this.newCharacter.race
       },
-      user_id: this.userId
+      user_id: this.userId,
+      xp: 0
     };
 
-    this.http.post<{ message: string; character: CharacterPayload }>(`${this.host_url}/characters`, payload)
-      .subscribe({
-        next: (res) => {
-          this.characters.push(res.character);
-          this.closeCreateModal();
-          this.newCharacter = {
-            name: '',
-            race: '',
-            stats: {
-              strength: 5,
-              agility: 5,
-              health: 100
-            }
-          };
-        },
-        error: (err) => {
-          console.error('Error creating character:', err);
-        }
-      });
-
+    this.http.post<{ message: string; character: CharacterPayload }>(
+      `${this.host_url}/characters`,
+      payload
+    ).subscribe({
+      next: (res) => {
+        // El backend DEBE devolver el personaje con id real
+        console.log('Personaje creado con id:', res.character.id);
+        this.characters.push(res.character);
+        this.closeCreateModal();
+        this.resetNewCharacterForm();
+      },
+      error: (err) => {
+        console.error('Error creating character:', err);
+      }
+    });
   }
+
+  private resetNewCharacterForm() {
+    this.newCharacter = {
+      name: '',
+      race: '',
+      stats: {
+        strength: 5,
+        agility: 5,
+        health: 100
+      }
+    };
+  }
+
 
   loadCharacters() {
     if (!this.userId) return;
@@ -144,46 +149,38 @@ export class CharactersPage implements OnInit {
       });
   }
 
-  startGame(character: CharacterPayload) {
-    if (!character) return;
-
-    // Guardamos personaje seleccionado
-    localStorage.setItem('selectedCharacter', JSON.stringify(character));
-
-    // Llamamos al backend para generar la narrativa inicial
-    const selectedCharacter = JSON.parse(localStorage.getItem('selectedCharacter')!);
-
-
-    // Hacer que haga primero el get de /characterplay/:charid del backend <--- para obtener el jugador seleccionado 
-
-    this.http.get<{ character: CharacterPayload }>(`${this.host_url}/characterplay/${character.user_id}`)
-      .subscribe({
-        next: (res) => {
-          console.log('Personaje para jugar:', res.character);
-          localStorage.setItem('selectedCharacter', JSON.stringify(res.character));
-          this.generateInitialNarrative(res.character);
-        },
-        error: (err) => {
-          console.error('Error al obtener personaje para jugar:', err);
-        }
-      });
+ startGame(character: CharacterPayload): void {
+  if (!character?.id) {
+    console.warn('No se puede iniciar: personaje sin ID');
+    return;
   }
 
-  generateInitialNarrative(selectedCharacter: CharacterPayload) {
+  const charId = character.id;
 
-    this.http.post(`${this.host_url}/gemini`, { character: selectedCharacter })
-      .subscribe({
-        next: (res: any) => {
-          console.log('Narrativa inicial:', res.response);
-          localStorage.setItem('gameNarrative', JSON.stringify(res));
-          this.router.navigate(['/game']);
-        },
-        error: (err) => {
-          console.error('Error al generar narrativa:', err);
-        }
-      });
-  }
+  this.http.get<{ character: CharacterPayload; narrative: string }>(
+    `${this.host_url}/gemini/${charId}`
+  ).subscribe({
+    next: (res) => {
+      // Guardamos ambos datos
+      localStorage.setItem('selectedCharacter', JSON.stringify(res.character));
+      localStorage.setItem('gameNarrative', JSON.stringify({ response: res.narrative }));
+      
+      console.log('Partida iniciada - Personaje:', res.character);
+      console.log('Narrativa inicial:', res.narrative.substring(0, 200) + '...');
 
+      // Navegamos al juego
+      this.router.navigate(['/game']);
+    },
+    error: (err) => {
+      console.error('Error al iniciar la partida:', err);
+      // Aquí pondrías un toast: "No se pudo iniciar la aventura"
+    }
+  });
+}
+
+goToMenu() {
+  this.router.navigate(['/start-menu']);
+}
 
 
 }
