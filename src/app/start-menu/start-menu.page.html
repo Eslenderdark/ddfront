@@ -9,8 +9,9 @@
     <!-- FILA SUPERIOR -->
     <ion-row class="menu-row">
 
-      <div class="menu-button" (click)="goTo('characters')">
+      <div class="menu-button" [class.disabled]="!isLogged" (click)="isLogged && goTo('characters')">
         <h1>Characters</h1>
+        <span *ngIf="!isLogged" class="login-required">Login required</span>
       </div>
 
 
@@ -34,7 +35,7 @@
         <span class="coming-soon">Coming soon...</span>
       </div>
 
-      <div class="menu-button" (click)="goTo('auth')">
+      <div class="menu-button" (click)="handleAuth()">
         <h1>{{ isLogged ? 'Logout' : 'Login' }}</h1>
       </div>
 
