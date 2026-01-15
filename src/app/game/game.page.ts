@@ -14,10 +14,12 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonGrid, IonRow, IonButton
 })
 export class GamePage implements OnInit {
 
+
   constructor(private http: HttpClient) { }
 
   public url_host = 'http://localhost:3000/' // URL del host del servidor backend
   public response: any[] = [];// Array de las respuestas del servidor
+
   public playerStats = {
     id: '', // lo recibimos, de momento lo dejamos vacío
     description: '', // lo mismo
@@ -33,12 +35,24 @@ export class GamePage implements OnInit {
     //await this.recievePrompt();
   }
 
-  //async recievePrompt() { // Funcion para recibir el prompt inicial del servidor
-    //this.http.get(this.url_host + 'gemini').subscribe((response: any) => { // Llamada para el primer prompt (Se usa una vez)
-     // console.log('Respuesta: ' + JSON.stringify(response));
-      //this.response.push(response); //Añadimos la respuesta al array de respuestas para verlo en pantalla
-   // });
-  //}
+
+
+  async recievePrompt() {
+    const charId = localStorage.getItem('selectedCharacterId');
+
+    if (!charId) {
+      console.error('No hay charId seleccionado');
+      return;
+    }
+
+    this.http.get(this.url_host + 'gemini/' + charId)
+      .subscribe((response: any) => {
+        console.log('Respuesta:', response);
+        this.response.push(response.narrative);
+        this.playerStats = response.character;
+      });
+  }
+
 
   async sendPromptResponse(letterOption: string) { // Funcion para responder a los prompts 
     this.http.get(this.url_host + 'geminiresponse/' + letterOption).subscribe((response: any) => { // LetterOption es la respuesta del usuario

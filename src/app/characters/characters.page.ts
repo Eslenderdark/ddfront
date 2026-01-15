@@ -149,38 +149,45 @@ export class CharactersPage implements OnInit {
       });
   }
 
- startGame(character: CharacterPayload): void {
-  if (!character?.id) {
-    console.warn('No se puede iniciar: personaje sin ID');
-    return;
+  startGame(character: CharacterPayload): void {
+    if (!character?.id) {
+      console.warn('No se puede iniciar: personaje sin ID');
+      return;
+    }
+
+    const charId = character.id;
+
+    if (!charId) {
+      console.error('No hay charId seleccionado');
+      return;
+    }
+
+
+    this.http.get<{ character: CharacterPayload; narrative: string }>(
+      `${this.host_url}/gemini/${charId}`
+    ).subscribe({
+      next: (res) => {
+        // Guardamos ambos datos
+        localStorage.setItem('selectedCharacterId', String(res.character.id));
+        localStorage.setItem('selectedCharacter', JSON.stringify(res.character));
+        localStorage.setItem('gameNarrative', JSON.stringify({ response: res.narrative }));
+
+        console.log('Partida iniciada - Personaje:', res.character);
+        console.log('Narrativa inicial:', res.narrative.substring(0, 200) + '...');
+
+        // Navegamos al juego
+        this.router.navigate(['/game']);
+      },
+      error: (err) => {
+        console.error('Error al iniciar la partida:', err);
+        // Aquí pondrías un toast: "No se pudo iniciar la aventura"
+      }
+    });
   }
 
-  const charId = character.id;
-
-  this.http.get<{ character: CharacterPayload; narrative: string }>(
-    `${this.host_url}/gemini/${charId}`
-  ).subscribe({
-    next: (res) => {
-      // Guardamos ambos datos
-      localStorage.setItem('selectedCharacter', JSON.stringify(res.character));
-      localStorage.setItem('gameNarrative', JSON.stringify({ response: res.narrative }));
-      
-      console.log('Partida iniciada - Personaje:', res.character);
-      console.log('Narrativa inicial:', res.narrative.substring(0, 200) + '...');
-
-      // Navegamos al juego
-      this.router.navigate(['/game']);
-    },
-    error: (err) => {
-      console.error('Error al iniciar la partida:', err);
-      // Aquí pondrías un toast: "No se pudo iniciar la aventura"
-    }
-  });
-}
-
-goToMenu() {
-  this.router.navigate(['/start-menu']);
-}
+  goToMenu() {
+    this.router.navigate(['/start-menu']);
+  }
 
 
 }
