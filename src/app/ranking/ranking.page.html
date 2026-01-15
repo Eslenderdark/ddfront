@@ -1,13 +1,68 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>ranking</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">ranking</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Podio Top 3 -->
+  <div class="podio-container">
+
+    <!-- Plata -->
+    <div class="podio-column silver" *ngIf="ranking.length > 1">
+      <div class="player-card">
+        <p class="podio-rank">2</p>
+        <p class="podio-name">{{ ranking[1]?.name }}</p>
+        <p class="podio-xp">{{ ranking[1]?.xp }} XP</p>
+        <div class="player-stats">
+          <p>Race: {{ ranking[1]?.state.race }}</p>
+          <p>HP: {{ ranking[1]?.hp }} | Str: {{ ranking[1]?.strength }} | Agi: {{ ranking[1]?.agility }} | Luck: {{ ranking[1]?.luck }}</p>
+          <p>Alive: {{ ranking[1]?.alive }}</p>
+        </div>
+      </div>
+      <div class="podio-base silver"></div>
+    </div>
+
+    <!-- Oro -->
+    <div class="podio-column gold" *ngIf="ranking.length > 0">
+      <div class="player-card">
+        <p class="podio-rank">1</p>
+        <p class="podio-name">{{ ranking[0]?.name }}</p>
+        <p class="podio-xp">{{ ranking[0]?.xp }} XP</p>
+        <div class="player-stats">
+          <p>Race: {{ ranking[0]?.state.race }}</p>
+          <p>HP: {{ ranking[0]?.hp }} | Str: {{ ranking[0]?.strength }} | Agi: {{ ranking[0]?.agility }} | Luck: {{ ranking[0]?.luck }}</p>
+          <p>Alive: {{ ranking[0]?.alive }}</p>
+        </div>
+      </div>
+      <div class="podio-base gold"></div>
+    </div>
+
+    <!-- Bronce -->
+    <div class="podio-column bronze" *ngIf="ranking.length > 2">
+      <div class="player-card">
+        <p class="podio-rank">3</p>
+        <p class="podio-name">{{ ranking[2]?.name }}</p>
+        <p class="podio-xp">{{ ranking[2]?.xp }} XP</p>
+        <div class="player-stats">
+          <p>Race: {{ ranking[2]?.state.race }}</p>
+          <p>HP: {{ ranking[2]?.hp }} | Str: {{ ranking[2]?.strength }} | Agi: {{ ranking[2]?.agility }} | Luck: {{ ranking[2]?.luck }}</p>
+          <p>Alive: {{ ranking[2]?.alive }}</p>
+        </div>
+      </div>
+      <div class="podio-base bronze"></div>
+    </div>
+
+  </div>
+
+  <!-- Resto del ranking -->
+  <ion-list class="ranking-list">
+    <ion-item *ngFor="let player of ranking.slice(3); let i = index">
+      <ion-label class="player-card">
+        <h2>#{{ i + 4 }} - {{ player.name }}</h2>
+        <span class="xp">XP: {{ player.xp }}</span>
+        <div class="player-stats">
+          <p>Race: {{ player.state.race }}</p>
+          <p>HP: {{ player.hp }} | Str: {{ player.strength }} | Agi: {{ player.agility }} | Luck: {{ player.luck }}</p>
+          <p>Alive: {{ player.alive }}</p>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
 </ion-content>
