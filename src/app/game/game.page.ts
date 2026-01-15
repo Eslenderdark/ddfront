@@ -31,10 +31,10 @@ export class GamePage implements OnInit {
     run: 0,
   }
 
-  async ngOnInit() { // Cuando carga la pagina, se recibe el primer prompt
-    //await this.recievePrompt();
-  }
 
+  async ngOnInit() { // Cuando carga la pagina, se recibe el primer prompt
+    await this.recievePrompt();
+  }
 
 
   async recievePrompt() {
