@@ -30,15 +30,15 @@ export class GamePage implements OnInit {
   }
 
   async ngOnInit() { // Cuando carga la pagina, se recibe el primer prompt
-    await this.recievePrompt();
+    //await this.recievePrompt();
   }
 
-  async recievePrompt() { // Funcion para recibir el prompt inicial del servidor
-    this.http.get(this.url_host + 'gemini').subscribe((response: any) => { // Llamada para el primer prompt (Se usa una vez)
-      console.log('Respuesta: ' + JSON.stringify(response));
-      this.response.push(response); //Añadimos la respuesta al array de respuestas para verlo en pantalla
-    });
-  }
+  //async recievePrompt() { // Funcion para recibir el prompt inicial del servidor
+    //this.http.get(this.url_host + 'gemini').subscribe((response: any) => { // Llamada para el primer prompt (Se usa una vez)
+     // console.log('Respuesta: ' + JSON.stringify(response));
+      //this.response.push(response); //Añadimos la respuesta al array de respuestas para verlo en pantalla
+   // });
+  //}
 
   async sendPromptResponse(letterOption: string) { // Funcion para responder a los prompts 
     this.http.get(this.url_host + 'geminiresponse/' + letterOption).subscribe((response: any) => { // LetterOption es la respuesta del usuario
