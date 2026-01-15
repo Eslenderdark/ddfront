@@ -1,0 +1,111 @@
+ion-content {
+ 
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Contenedor del podio: mismo fondo que ion-content */
+.podio-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 50px;
+  margin: 50px 0 30px 0;
+  flex-wrap: wrap;
+  position: relative;
+  
+  padding-bottom: 20px;
+}
+
+
+/* Cada columna del podio */
+.podio-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* Tarjeta de jugador del podio (más rectangular) */
+.podio-column .player-card {
+  width: 140px;       /* ancho menor */
+  height: 160px;      /* altura fija */
+  padding: 10px;
+  border-left: 6px solid #ff7d00;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(255, 125, 0, 0.3);
+  background: #e8e8e8;  /* mismo color que las tarjetas normales */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 25px; /* separación de la base */
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+/* Base del podio */
+.podio-base {
+  width: 100%;
+  height: 40px; /* altura de la plataforma */
+  border-radius: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.podio-base.gold { background: gold; }
+.podio-base.silver { background: silver; }
+.podio-base.bronze { background: #cd7f32; }
+
+/* Escalado del podio */
+.podio-column.gold { transform: scale(1.1); }    
+.podio-column.silver { transform: scale(1); }
+.podio-column.bronze { transform: scale(0.95); }
+
+/* Texto dentro de la tarjeta */
+.podio-name, .podio-xp, .podio-rank {
+  text-align: center;
+  font-family: 'Daydream', system-ui, sans-serif;
+  font-weight: bold;
+  margin: 3px 0;
+}
+
+.podio-name { color: #ff7d00; font-size: 0.95em; }
+.podio-xp { color: #333; font-size: 0.8em; }
+.podio-rank { font-size: 1em; color: #ff7d00; }
+
+/* Resto del ranking */
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.ranking-list .player-card {
+  width: 90%;
+  max-width: 400px;
+  margin-bottom: 20px;
+  background: #e8e8e8;  /* gris suave */
+  border-left: 6px solid #ff7d00;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(255, 125, 0, 0.3);
+}
+
+.ranking-list .player-card h2 {
+  color: #ff7d00;
+  font-family: 'Daydream', system-ui, sans-serif;
+  font-size: 1.1em;
+  margin: 0 0 5px 0;
+}
+
+.ranking-list .player-card .xp { color: #333; }
+
+.player-stats p {
+  font-size: 0.85em;
+  color: #555;
+  margin: 2px 0;
+}

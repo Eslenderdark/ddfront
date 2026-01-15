@@ -32,7 +32,7 @@ export class GamePage implements OnInit {
   }
 
   async ngOnInit() { // Cuando carga la pagina, se recibe el primer prompt
-    await this.recievePrompt();
+    //await this.recievePrompt();
   }
 
 
@@ -52,6 +52,7 @@ export class GamePage implements OnInit {
         this.playerStats = response.character;
       });
   }
+
 
   async sendPromptResponse(letterOption: string) { // Funcion para responder a los prompts 
     this.http.get(this.url_host + 'geminiresponse/' + letterOption).subscribe((response: any) => { // LetterOption es la respuesta del usuario
