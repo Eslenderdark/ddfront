@@ -20,7 +20,7 @@
         <span class="coming-soon">Coming soon...</span>
       </div>
 
-      <div class="menu-button" (click)="goTo('ranking')">
+      <div class="menu-button" [class.disabled]="!isLogged" (click)="goTo('ranking')">
         <h1>Ranking</h1>
         <span *ngIf="!isLogged" class="login-required">Login required</span>
       </div>
