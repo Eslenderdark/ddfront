@@ -11,7 +11,7 @@ import { RouterModule, Router } from '@angular/router';
   templateUrl: './game.page.html',
   styleUrls: ['./game.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, RouterModule, Router, CommonModule, FormsModule, IonGrid, IonRow, IonButton, navigate]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, RouterModule, Router, CommonModule, FormsModule, IonGrid, IonRow, IonButton]
 })
 export class GamePage implements OnInit {
   constructor(private http: HttpClient, private router: Router) { }
