@@ -3,25 +3,31 @@
 
     <!-- Info del personaje -->
     <div id="characterinfo-div">
-      <h2 class="characterinfo-text">Vida: {{playerStats.hp}}</h2>
-      <h2 class="characterinfo-text">Fuerza: {{playerStats.strength}}</h2>
-      <h2 class="characterinfo-text">Agilidad: {{playerStats.agility}}</h2>
-      <h2 class="characterinfo-text">Suerte: {{playerStats.luck}}</h2>
+      <h2 class="characterinfo-text">Vida: {{ playerStats.hp }}</h2>
+      <h2 class="characterinfo-text">Fuerza: {{ playerStats.strength }}</h2>
+      <h2 class="characterinfo-text">Agilidad: {{ playerStats.agility }}</h2>
+      <h2 class="characterinfo-text">Suerte: {{ playerStats.luck }}</h2>
     </div>
 
     <!-- Zona de narrativa / IA -->
-    <div id="ia_box">
-      <a *ngFor="let response of response" class="ia-text">
-        {{response}}
-      </a>
-    </div>
+<div id="ia_box">
+  <p class="ia-text">
+    {{ displayedText }}
+  </p>
 
-    <!-- Opciones de elección -->
-    <div class="options-box">
-      <ion-button class="option-button" (click)="sendPromptResponse('A')">A</ion-button>
-      <ion-button class="option-button" (click)="sendPromptResponse('B')">B</ion-button>
-      <ion-button class="option-button" (click)="sendPromptResponse('C')">C</ion-button>
-    </div>
+  <p class="loading-text" *ngIf="isLoading">
+    ⏳ Loading...
+  </p>
+</div>
+
+<!-- Opciones -->
+<div class="options-box" *ngIf="!isTyping && !isLoading">
+  <ion-button class="option-button" (click)="sendPromptResponse('A')">A</ion-button>
+  <ion-button class="option-button" (click)="sendPromptResponse('B')">B</ion-button>
+  <ion-button class="option-button" (click)="sendPromptResponse('C')">C</ion-button>
+</div>
+
 
   </div>
 </ion-content>
+

@@ -19,10 +19,14 @@ export class GamePage implements OnInit {
 
   public url_host = 'http://localhost:3000/' // URL del host del servidor backend
   public response: any[] = [];// Array de las respuestas del servidor
-
+  public fullNarrative = ''; 
+  public displayedText = '';
+  public isTyping = false;
+  public isLoading = false;
+  public typingSpeed = 20; 
   public playerStats = {
-    id: '', // lo recibimos, de momento lo dejamos vacío
-    description: '', // lo mismo
+    id: '', 
+    description: '', 
     hp: '100',
     strength: '100',
     agility: '100',
@@ -38,36 +42,62 @@ export class GamePage implements OnInit {
 
 
   async recievePrompt() {
-    const charId = localStorage.getItem('selectedCharacterId');
+  const charId = localStorage.getItem('selectedCharacterId');
+  if (!charId) return;
 
-    if (!charId) {
-      console.error('No hay charId seleccionado');
-      return;
-    }
+  this.isLoading = true;
 
-    this.http.get(this.url_host + 'gemini/' + charId)
-      .subscribe((response: any) => {
-        console.log('Respuesta:', response);
-        this.response.push(response.narrative);
-        this.playerStats = response.character;
-      });
-  }
+  this.http.get(this.url_host + 'gemini/' + charId)
+    .subscribe(async (response: any) => {
+      this.playerStats = response.character;
+      await this.typeText(response.narrative + '\n\n');
+      this.isLoading = false;
+    });
+}
 
 
-  async sendPromptResponse(letterOption: string) { // Funcion para responder a los prompts 
-    this.http.get(this.url_host + 'geminiresponse/' + letterOption).subscribe((response: any) => { // LetterOption es la respuesta del usuario
-      console.log('Respuesta: ' + JSON.stringify(response))
-      this.playerStats = {
-        id: '', // lo recibimos, de momento lo dejamos vacío
-        description: '', // lo mismo
-        hp: response.hp,
-        strength: response.strength,
-        agility: response.agility,
-        luck: response.luck,
-        alive: response.alive,
-        run: response.run,
+
+  async sendPromptResponse(letterOption: string) {
+  if (this.isTyping || this.isLoading) return;
+
+  this.isLoading = true;
+
+  this.http.get(this.url_host + 'geminiresponse/' + letterOption)
+    .subscribe(async (response: any) => {
+
+      this.playerStats.hp = response.hp;
+      this.playerStats.strength = response.strength;
+      this.playerStats.agility = response.agility;
+      this.playerStats.luck = response.luck;
+
+      await this.typeText(
+        `\n\n👉 Elegiste ${letterOption}\n\n${response.response}\n\n`
+      );
+
+      this.isLoading = false;
+    });
+}
+
+  async typeText(text: string): Promise<void> {
+  this.isTyping = true;
+
+  return new Promise(resolve => {
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < text.length) {
+        this.fullNarrative += text.charAt(i);
+        this.displayedText = this.fullNarrative;
+        i++;
+      } else {
+        clearInterval(interval);
+        this.isTyping = false;
+        resolve();
       }
-      this.response.push(response.response);//Añadimos la respuesta al array de respuestas para verlo en pantalla
-    })
-  }
+    }, this.typingSpeed);
+  });
+}
+
+
+
+
 }
