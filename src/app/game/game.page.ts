@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonGrid, IonRow, IonButton } from '@ionic/angular/standalone';
+import { HttpClient } from '@angular/common/http';
+import { RouterModule, Router } from '@angular/router';
 
 
 @Component({
@@ -10,13 +11,10 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonGrid, IonRow, IonButton
   templateUrl: './game.page.html',
   styleUrls: ['./game.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonGrid, IonRow, IonButton]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, RouterModule, Router, CommonModule, FormsModule, IonGrid, IonRow, IonButton, navigate]
 })
 export class GamePage implements OnInit {
-
-
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient, private router: Router) { }
   public url_host = 'http://localhost:3000/' // URL del host del servidor backend
   public response: any[] = [];// Array de las respuestas del servidor
   public fullNarrative = ''; 
@@ -70,9 +68,19 @@ export class GamePage implements OnInit {
       this.playerStats.agility = response.agility;
       this.playerStats.luck = response.luck;
 
+
       await this.typeText(
         `\n\n👉 Elegiste ${letterOption}\n\n${response.response}\n\n`
       );
+      
+      if (response.alive === false) {
+        this.playerStats.alive = 'false';
+        alert('💀 Has muerto en la aventura. Fin del juego. 💀');
+        //Navegar a otra pagina
+        this.router.navigate(['/start-menu']);
+        this.isLoading = false;
+        return;
+      }
 
       this.isLoading = false;
     });
