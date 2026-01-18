@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonGrid, IonRow, IonButton } from '@ionic/angular/standalone';
+import { IonContent, IonButton } from '@ionic/angular/standalone';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule, Router } from '@angular/router';
-
+import { StartMenuPage } from '../start-menu/start-menu.page';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.page.html',
   styleUrls: ['./game.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, RouterModule, Router, CommonModule, FormsModule, IonGrid, IonRow, IonButton]
+  imports: [IonContent, RouterModule, CommonModule, FormsModule, IonButton]
 })
 export class GamePage implements OnInit {
   constructor(private http: HttpClient, private router: Router) { }
@@ -34,7 +34,8 @@ export class GamePage implements OnInit {
   }
 
 
-  async ngOnInit() { // Cuando carga la pagina, se recibe el primer prompt
+  async ngOnInit() {
+    StartMenuPage.stopMenuMusic();
     await this.recievePrompt();
   }
 

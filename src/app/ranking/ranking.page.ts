@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar,IonList,IonItem,IonLabel } from '@ionic/angular/standalone';
+import { IonContent, IonToolbar,IonList,IonItem,IonLabel } from '@ionic/angular/standalone';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule, Router } from '@angular/router';
 
@@ -10,7 +10,7 @@ import { RouterModule, Router } from '@angular/router';
   templateUrl: './ranking.page.html',
   styleUrls: ['./ranking.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonList,IonItem,IonLabel,RouterModule]
+  imports: [IonContent, IonToolbar, CommonModule, FormsModule, IonList,IonItem,IonLabel,RouterModule]
 })
 export class RankingPage implements OnInit {
 

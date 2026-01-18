@@ -10,7 +10,7 @@ import {
   IonCard, IonCardContent,
   IonIcon, IonButton,
   IonModal, IonItem, IonLabel, IonInput,
-  IonSelect, IonSelectOption, IonRange, IonButtons, IonCardHeader, IonCardTitle, IonCardSubtitle
+  IonSelect, IonSelectOption, IonRange, IonButtons, IonCardHeader, IonCardTitle
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { addCircleOutline } from 'ionicons/icons';
@@ -45,7 +45,7 @@ interface CharacterPayload {
     IonCard, IonCardContent,
     IonIcon, IonButton,
     IonModal, IonItem, IonLabel, IonInput,
-    IonSelect, IonSelectOption, IonRange, IonButtons, IonCardHeader, IonCardTitle, IonCardSubtitle
+    IonSelect, IonSelectOption, IonRange, IonButtons, IonCardHeader, IonCardTitle
   ]
 })
 export class CharactersPage implements OnInit {

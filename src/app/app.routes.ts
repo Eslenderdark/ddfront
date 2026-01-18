@@ -13,7 +13,8 @@ export const routes: Routes = [
   {
     path: 'start-menu',
     loadComponent: () => import('./start-menu/start-menu.page').then( m => m.StartMenuPage)
-  },  {
+  },
+  {
     path: 'inventory',
     loadComponent: () => import('./inventory/inventory.page').then( m => m.InventoryPage)
   },
@@ -24,10 +25,6 @@ export const routes: Routes = [
   {
     path: 'characters',
     loadComponent: () => import('./characters/characters.page').then( m => m.CharactersPage)
-  },
-  {
-    path: 'login',
-    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
   },
   {
     path: 'ranking',
