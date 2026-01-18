@@ -56,8 +56,8 @@ export class CharactersPage implements OnInit {
     name: '',
     race: '',
     stats: {
-      strength: 5,
-      agility: 5,
+      strength: 100,
+      agility: 100,
       health: 100
     }
   };
@@ -65,6 +65,7 @@ export class CharactersPage implements OnInit {
   characters: CharacterPayload[] = [];
   host_url = 'http://localhost:3000';
   userId = '';
+  luckboost = 0;
 
   constructor(private http: HttpClient, private router: Router) {
     addIcons({ addCircleOutline });
@@ -85,9 +86,24 @@ export class CharactersPage implements OnInit {
   }
 
   createCharacter() {
+
+    if (this.newCharacter.stats.strength + this.newCharacter.stats.agility + this.newCharacter.stats.health > 300) {
+      console.log('Stats exceed maximum total');
+      alert('The total of Strength, Agility, and Health must not exceed 300.');
+      return;
+    }
+    else {
     if (!this.newCharacter.name || !this.newCharacter.race) {
       console.log('Fill all fields');
       return;
+    }
+
+    if (this.newCharacter.race === 'Elf'){
+      this.newCharacter.stats.agility += 20;
+    } else if (this.newCharacter.race === 'Goblin'){
+      this.luckboost += 20;
+    } else if (this.newCharacter.race === 'Orc'){
+      this.newCharacter.stats.strength += 20;
     }
 
     const payload: CharacterPayload = {
@@ -95,7 +111,7 @@ export class CharactersPage implements OnInit {
       hp: this.newCharacter.stats.health,
       strength: this.newCharacter.stats.strength,
       agility: this.newCharacter.stats.agility,
-      luck: 1,
+      luck: 100 + this.luckboost,
       alive: true,
       run: false,
       state: {
@@ -121,14 +137,15 @@ export class CharactersPage implements OnInit {
       }
     });
   }
+}
 
   private resetNewCharacterForm() {
     this.newCharacter = {
       name: '',
       race: '',
       stats: {
-        strength: 5,
-        agility: 5,
+        strength: 100,
+        agility: 100,
         health: 100
       }
     };

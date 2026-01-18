@@ -58,7 +58,7 @@
 
         <ion-item>
           <ion-label position="stacked">Name</ion-label>
-          <ion-input [(ngModel)]="newCharacter.name" maxlength="20" placeholder="Character name">
+          <ion-input [(ngModel)]="newCharacter.name" maxlength="100" placeholder="Character name">
           </ion-input>
         </ion-item>
 
@@ -74,19 +74,19 @@
 
         <ion-item>
           <ion-label>Strength: {{ newCharacter.stats.strength }}</ion-label>
-          <ion-range min="1" max="10" step="1" snaps="true" [(ngModel)]="newCharacter.stats.strength">
+          <ion-range min="0" max="200" step="5" snaps="true" [(ngModel)]="newCharacter.stats.strength">
           </ion-range>
         </ion-item>
 
         <ion-item>
           <ion-label>Agility: {{ newCharacter.stats.agility }}</ion-label>
-          <ion-range min="1" max="10" step="1" snaps="true" [(ngModel)]="newCharacter.stats.agility">
+          <ion-range min="0" max="200" step="5" snaps="true" [(ngModel)]="newCharacter.stats.agility">
           </ion-range>
         </ion-item>
 
         <ion-item>
           <ion-label>Health: {{ newCharacter.stats.health }}</ion-label>
-          <ion-range min="50" max="200" step="10" snaps="true" [(ngModel)]="newCharacter.stats.health">
+          <ion-range min="5" max="200" step="5" snaps="true" [(ngModel)]="newCharacter.stats.health">
           </ion-range>
         </ion-item>
 
