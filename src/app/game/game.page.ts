@@ -64,6 +64,8 @@ export class GamePage implements OnInit {
   this.http.get(this.url_host + 'geminiresponse/' + letterOption)
     .subscribe(async (response: any) => {
 
+      console.log('Respuesta del servidor:', response);
+
       this.playerStats.hp = response.hp;
       this.playerStats.strength = response.strength;
       this.playerStats.agility = response.agility;
