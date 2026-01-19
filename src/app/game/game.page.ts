@@ -22,8 +22,9 @@ export class GamePage implements OnInit {
   public isTyping = false;
   public isLoading = false;
   public typingSpeed = 20; 
+  public charId = Number(localStorage.getItem('selectedCharacterId'));
   public playerStats = {
-    id: '', 
+    id: this.charId, 
     description: '', 
     hp: '100',
     strength: '100',
@@ -35,18 +36,15 @@ export class GamePage implements OnInit {
 
 
   async ngOnInit() {
-    StartMenuPage.stopMenuMusic();
     await this.recievePrompt();
+    StartMenuPage.stopMenuMusic();
   }
 
 
   async recievePrompt() {
-  const charId = localStorage.getItem('selectedCharacterId');
-  if (!charId) return;
-
   this.isLoading = true;
 
-  this.http.get(this.url_host + 'gemini/' + charId)
+  this.http.get(this.url_host + 'gemini/' + this.charId)
     .subscribe(async (response: any) => {
       this.playerStats = response.character;
       this.isLoading = false;
