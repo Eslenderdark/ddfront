@@ -6,12 +6,14 @@
 
 
 <ion-content [fullscreen]="true" class="ion-padding">
-
+  <p class="loading-text" *ngIf="isLoading">
+    ⏳ Loading...
+  </p>
   <ion-grid>
     <ion-row>
 
       <!-- CREATE CHARACTER CARD -->
-      <ion-col size="6" size-md="3">
+      <ion-col size="6" size-md="3" *ngIf="!isLoading">
         <ion-card button class="create-card" (click)="openCreateModal()">
           <ion-card-content class="create-card-content">
             <ion-icon name="add-circle-outline" class="create-icon"></ion-icon>
