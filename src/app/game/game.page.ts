@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonButton } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/standalone';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule, Router } from '@angular/router';
 import { StartMenuPage } from '../start-menu/start-menu.page';
@@ -11,7 +11,7 @@ import { StartMenuPage } from '../start-menu/start-menu.page';
   templateUrl: './game.page.html',
   styleUrls: ['./game.page.scss'],
   standalone: true,
-  imports: [IonContent, RouterModule, CommonModule, FormsModule, IonButton]
+  imports: [IonContent, RouterModule, CommonModule, FormsModule]
 })
 export class GamePage implements OnInit {
   constructor(private http: HttpClient, private router: Router) { }

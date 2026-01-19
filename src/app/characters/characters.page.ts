@@ -51,7 +51,6 @@ interface CharacterPayload {
 export class CharactersPage implements OnInit {
 
   isCreateModalOpen = false;
-
   newCharacter = {
     name: '',
     race: '',
@@ -66,6 +65,7 @@ export class CharactersPage implements OnInit {
   host_url = 'http://localhost:3000';
   userId = '';
   luckboost = 0;
+  public isLoading = false;
 
   constructor(private http: HttpClient, private router: Router) {
     addIcons({ addCircleOutline });
@@ -154,11 +154,12 @@ export class CharactersPage implements OnInit {
 
   loadCharacters() {
     if (!this.userId) return;
-
+      this.isLoading = true;
     this.http.get<{ characters: CharacterPayload[] }>(`${this.host_url}/characters/user/${this.userId}`)
       .subscribe({
         next: (res) => {
           this.characters = res.characters;
+          this.isLoading = false;
         },
         error: (err) => {
           console.error('Error loading characters', err);
