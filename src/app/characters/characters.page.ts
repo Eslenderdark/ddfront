@@ -93,51 +93,51 @@ export class CharactersPage implements OnInit {
       return;
     }
     else {
-    if (!this.newCharacter.name || !this.newCharacter.race) {
-      console.log('Fill all fields');
-      return;
-    }
-
-    if (this.newCharacter.race === 'Elf'){
-      this.newCharacter.stats.agility += 20;
-    } else if (this.newCharacter.race === 'Goblin'){
-      this.luckboost += 20;
-    } else if (this.newCharacter.race === 'Orc'){
-      this.newCharacter.stats.strength += 20;
-    }
-
-    const payload: CharacterPayload = {
-      name: this.newCharacter.name,
-      hp: this.newCharacter.stats.health,
-      strength: this.newCharacter.stats.strength,
-      agility: this.newCharacter.stats.agility,
-      luck: 100 + this.luckboost,
-      alive: true,
-      run: false,
-      state: {
-        race: this.newCharacter.race
-      },
-      user_id: this.userId,
-      xp: 0
-    };
-
-    this.http.post<{ message: string; character: CharacterPayload }>(
-      `${this.host_url}/characters`,
-      payload
-    ).subscribe({
-      next: (res) => {
-        // El backend DEBE devolver el personaje con id real
-        console.log('Personaje creado con id:', res.character.id);
-        this.characters.push(res.character);
-        this.closeCreateModal();
-        this.resetNewCharacterForm();
-      },
-      error: (err) => {
-        console.error('Error creating character:', err);
+      if (!this.newCharacter.name || !this.newCharacter.race) {
+        console.log('Fill all fields');
+        return;
       }
-    });
+
+      if (this.newCharacter.race === 'Elf') {
+        this.newCharacter.stats.agility += 20;
+      } else if (this.newCharacter.race === 'Goblin') {
+        this.luckboost += 20;
+      } else if (this.newCharacter.race === 'Orc') {
+        this.newCharacter.stats.strength += 20;
+      }
+
+      const payload: CharacterPayload = {
+        name: this.newCharacter.name,
+        hp: this.newCharacter.stats.health,
+        strength: this.newCharacter.stats.strength,
+        agility: this.newCharacter.stats.agility,
+        luck: 100 + this.luckboost,
+        alive: true,
+        run: false,
+        state: {
+          race: this.newCharacter.race
+        },
+        user_id: this.userId,
+        xp: 0
+      };
+
+      this.http.post<{ message: string; character: CharacterPayload }>(
+        `${this.host_url}/characters`,
+        payload
+      ).subscribe({
+        next: (res) => {
+          // El backend DEBE devolver el personaje con id real
+          console.log('Personaje creado con id:', res.character.id);
+          this.characters.push(res.character);
+          this.closeCreateModal();
+          this.resetNewCharacterForm();
+        },
+        error: (err) => {
+          console.error('Error creating character:', err);
+        }
+      });
+    }
   }
-}
 
   private resetNewCharacterForm() {
     this.newCharacter = {
@@ -178,19 +178,35 @@ export class CharactersPage implements OnInit {
       console.error('No hay charId seleccionado');
       return;
     }
-        localStorage.setItem('selectedCharacterId', charId.toString());
-        
+    localStorage.setItem('selectedCharacterId', charId.toString());
 
-        console.log('Partida iniciada - Personaje:', charId);
-        console.log('Narrativa iniciada para el personaje:', charId);
 
-        // Navegamos al juego
-        this.router.navigate(['/game']);
-      }
+    console.log('Partida iniciada - Personaje:', charId);
+    console.log('Narrativa iniciada para el personaje:', charId);
+
+    // Navegamos al juego
+    this.router.navigate(['/game']);
+  }
 
   goToMenu() {
     this.router.navigate(['/start-menu']);
   }
 
-
+  deleteCharacter(character: CharacterPayload): void {
+    if (!character?.id) {
+      console.warn('No se puede eliminar: personaje sin ID');
+      return;
+    }
+    const charId = character.id;
+    this.http.delete<{ message: string }>(`${this.host_url}/characters/${charId}`)
+      .subscribe({
+        next: (res) => {
+          console.log('Personaje eliminado:', res.message);
+          this.characters = this.characters.filter(c => c.id !== charId);
+        },
+        error: (err) => {
+          console.error('Error eliminando personaje:', err);
+        }
+      });
+  }
 }
