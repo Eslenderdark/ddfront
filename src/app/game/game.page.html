@@ -22,9 +22,21 @@
 
 <!-- Opciones -->
 <div class="options-box" *ngIf="!isTyping && !isLoading">
-  <ion-button class="option-button" (click)="sendPromptResponse('A')">A</ion-button>
-  <ion-button class="option-button" (click)="sendPromptResponse('B')">B</ion-button>
-  <ion-button class="option-button" (click)="sendPromptResponse('C')">C</ion-button>
+  <div class="button-border">
+    <div class="button-base">
+      <button class="option-button" (click)="sendPromptResponse('A')">A</button>
+    </div>
+  </div>
+  <div class="button-border">
+    <div class="button-base">
+      <button class="option-button" (click)="sendPromptResponse('B')">B</button>
+    </div>
+  </div>
+  <div class="button-border">
+    <div class="button-base">
+      <button class="option-button" (click)="sendPromptResponse('C')">C</button>
+    </div>
+  </div>
 </div>
 
 

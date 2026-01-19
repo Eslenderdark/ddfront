@@ -38,6 +38,16 @@ ion-row{
     top: 20px;
     left: 50%;
     transform: translateX(-50%) translateY(40%) scale(1.0);
+    animation: float-logo 2s ease-in-out infinite;
+}
+
+@keyframes float-logo {
+  0%, 100% {
+    transform: translateX(-50%) translateY(40%) scale(1.0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(35%) scale(1.01);
+  }
 }
 
 #menu-grid{

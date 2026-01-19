@@ -76,39 +76,69 @@ export class StartMenuPage implements OnInit {
   }
 
   ionViewWillEnter() {
+    // Si el audio existe y está inicializado, asegurarnos de que está sonando
     if (StartMenuPage.audio && StartMenuPage.audioInitialized) {
-      StartMenuPage.audio.play().catch(() => {
-        console.log('Audio necesita interacción del usuario');
-      });
+      if (StartMenuPage.audio.paused) {
+        StartMenuPage.audio.play().catch(() => {
+          console.log('Audio necesita interacción del usuario');
+          this.addUserInteractionListener();
+        });
+      }
+    } else if (!StartMenuPage.audio) {
+      // Si no existe, iniciarlo (caso de volver desde otra página después de stopMenuMusic)
+      this.startmusic();
+      this.addUserInteractionListener();
+    } else if (StartMenuPage.audio && !StartMenuPage.audioInitialized) {
+      // Si existe pero no está inicializado, añadir listeners
+      this.addUserInteractionListener();
     }
   }
 
   addUserInteractionListener() {
+    // Primero limpiar listeners anteriores si existen
+    if (this.playAudioOnInteraction) {
+      document.removeEventListener('click', this.playAudioOnInteraction);
+      document.removeEventListener('touchstart', this.playAudioOnInteraction);
+      document.removeEventListener('keydown', this.playAudioOnInteraction);
+    }
+
+    // Definir la función de interacción
     this.playAudioOnInteraction = () => {
-      if (StartMenuPage.audio && !StartMenuPage.audioInitialized) {
-        StartMenuPage.audio
-          .play()
-          .then(() => {
-            StartMenuPage.audioInitialized = true;
-            document.removeEventListener('click', this.playAudioOnInteraction);
-            document.removeEventListener(
-              'touchstart',
-              this.playAudioOnInteraction,
-            );
-            document.removeEventListener(
-              'keydown',
-              this.playAudioOnInteraction,
-            );
-          })
-          .catch(() => {
-            console.log('No se pudo reproducir el audio aún');
-          });
+      console.log('Interacción detectada, intentando reproducir audio');
+      
+      if (StartMenuPage.audio) {
+        // Si existe el audio, intentar reproducirlo
+        if (StartMenuPage.audio.paused || !StartMenuPage.audioInitialized) {
+          console.log('Intentando reproducir audio pausado/no inicializado');
+          StartMenuPage.audio
+            .play()
+            .then(() => {
+              StartMenuPage.audioInitialized = true;
+              console.log('Audio iniciado con interacción del usuario');
+              
+              // Limpiar listeners solo cuando se logra reproducir
+              if (this.playAudioOnInteraction) {
+                document.removeEventListener('click', this.playAudioOnInteraction);
+                document.removeEventListener('touchstart', this.playAudioOnInteraction);
+                document.removeEventListener('keydown', this.playAudioOnInteraction);
+              }
+            })
+            .catch((error) => {
+              console.log('No se pudo reproducir el audio aún:', error);
+            });
+        } else {
+          console.log('Audio ya está reproduciéndose');
+        }
+      } else {
+        console.log('No existe audio para reproducir');
       }
     };
-
+    
+    // Añadir nuevos listeners
     document.addEventListener('click', this.playAudioOnInteraction);
     document.addEventListener('touchstart', this.playAudioOnInteraction);
     document.addEventListener('keydown', this.playAudioOnInteraction);
+    console.log('Event listeners de audio añadidos');
   }
 
   handleAuth() {
@@ -142,9 +172,18 @@ export class StartMenuPage implements OnInit {
   }
 
   startmusic() {
-    if (StartMenuPage.audio) {
+    if (StartMenuPage.audio && !StartMenuPage.audio.paused) {
       return;
     }
+    
+    if (StartMenuPage.audio && StartMenuPage.audio.paused) {
+      StartMenuPage.audio.play().catch(() => {
+        console.log('Audio necesita interacción del usuario');
+        this.addUserInteractionListener();
+      });
+      return;
+    }
+    
     this.firstTrack = Math.random() < 0.5 ? 0 : 1;
     this.currentTrack = this.firstTrack;
     this.playTrack();
@@ -172,15 +211,22 @@ export class StartMenuPage implements OnInit {
       'assets/audio/menu/menu2.mp3',
     ];
 
+    if (StartMenuPage.audio) {
+      const oldAudio = StartMenuPage.audio;
+      oldAudio.pause();
+      oldAudio.src = '';
+    }
+
     StartMenuPage.audio = new Audio(tracks[this.currentTrack]);
     StartMenuPage.audio.volume = 0;
 
-    StartMenuPage.audio.addEventListener('ended', () => {
+    const onEnded = () => {
       this.currentTrack = this.currentTrack === 0 ? 1 : 0;
       this.playTrack();
-    });
+    };
+    StartMenuPage.audio.addEventListener('ended', onEnded);
 
-    StartMenuPage.audio.addEventListener('timeupdate', () => {
+    const onTimeUpdate = () => {
       if (!StartMenuPage.audio || this.volumeMute) return;
       const timeLeft =
         StartMenuPage.audio.duration - StartMenuPage.audio.currentTime;
@@ -190,7 +236,8 @@ export class StartMenuPage implements OnInit {
           StartMenuPage.audio.volume - 0.02,
         );
       }
-    });
+    };
+    StartMenuPage.audio.addEventListener('timeupdate', onTimeUpdate);
 
     StartMenuPage.audio
       .play()
@@ -209,10 +256,11 @@ export class StartMenuPage implements OnInit {
             this.fadeInInterval = null;
           }
         }, 50);
-        console.log(`Reproduciendo pista ${this.currentTrack + 1}`)
+        console.log(`Reproduciendo pista ${this.currentTrack + 1}`);
       })
       .catch(() => {
-        console.log('Esperando interacción del usuario');
+        console.log('Esperando interacción del usuario para reproducir');
+        this.addUserInteractionListener();
       });
   }
 
@@ -227,11 +275,7 @@ export class StartMenuPage implements OnInit {
     }
   }
 
-  ngOnDestroy() {
-    if (StartMenuPage.audio) {
-      StartMenuPage.audio.pause();
-      StartMenuPage.audio = null;
-    }
+  ngOnDestroy() {        
 
     if (this.fadeInInterval) {
       clearInterval(this.fadeInInterval);

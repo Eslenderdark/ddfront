@@ -49,8 +49,8 @@ export class GamePage implements OnInit {
   this.http.get(this.url_host + 'gemini/' + charId)
     .subscribe(async (response: any) => {
       this.playerStats = response.character;
-      await this.typeText(response.narrative + '\n\n');
       this.isLoading = false;
+      await this.typeText(response.narrative + '\n\n');
     });
 }
 
@@ -70,6 +70,8 @@ export class GamePage implements OnInit {
       this.playerStats.luck = response.luck;
 
 
+      this.isLoading = false;
+      
       await this.typeText(
         `\n\n👉 Elegiste ${letterOption}\n\n${response.response}\n\n`
       );
@@ -79,32 +81,29 @@ export class GamePage implements OnInit {
         alert('💀 Has muerto en la aventura. Fin del juego. 💀');
         //Navegar a otra pagina
         this.router.navigate(['/start-menu']);
-        this.isLoading = false;
         return;
       }
-
-      this.isLoading = false;
     });
 }
 
   async typeText(text: string): Promise<void> {
-  this.isTyping = true;
+    this.isTyping = true;
 
-  return new Promise(resolve => {
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < text.length) {
-        this.fullNarrative += text.charAt(i);
-        this.displayedText = this.fullNarrative;
-        i++;
-      } else {
-        clearInterval(interval);
-        this.isTyping = false;
-        resolve();
-      }
-    }, this.typingSpeed);
-  });
-}
+    return new Promise(resolve => {
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          this.fullNarrative += text.charAt(i);
+          this.displayedText = this.fullNarrative;
+          i++;
+        } else {
+          clearInterval(interval);
+          this.isTyping = false;
+          resolve();
+        }
+      }, this.typingSpeed);
+    });
+  }
 
 
 
