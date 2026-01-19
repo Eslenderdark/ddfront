@@ -29,8 +29,8 @@ export class GamePage implements OnInit {
     strength: '100',
     agility: '100',
     luck: '100',
-    alive: 'true',
-    run: 0,
+    alive: true,
+    run: true,
   }
 
 
@@ -77,14 +77,21 @@ export class GamePage implements OnInit {
       );
       
       if (response.alive === false) {
-        this.playerStats.alive = 'false';
+        this.playerStats.alive = false;
         alert('💀 Has muerto en la aventura. Fin del juego. 💀');
         //Navegar a otra pagina
         this.router.navigate(['/start-menu']);
         return;
       }
-    });
-}
+
+      if (response.run === false && response.alive === true) {
+        this.playerStats.run = false;
+        alert('Has completado tu mision con éxito. ¡Felicidades! Guerrero');
+        this.router.navigate(['/start-menu']);
+        return;
+      }
+      }
+    );}
 
   async typeText(text: string): Promise<void> {
     this.isTyping = true;
