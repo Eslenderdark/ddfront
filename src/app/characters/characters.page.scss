@@ -21,11 +21,6 @@ ion-content {
   animation: dungeon-pulse 12s infinite alternate;
 }
 
-@keyframes dungeon-pulse {
-  0% { background-position: 0 0, 0 0; filter: brightness(0.8); }
-  50% { background-position: 6px 6px, -6px -6px; filter: brightness(1.1); }
-  100% { background-position: 12px 12px, -12px -12px; filter: brightness(0.9); }
-}
 
 /* =========================== */
 /* TARJETA CREATE CHARACTER */
@@ -107,8 +102,9 @@ ion-card-header {
 ion-card-title {
   font-family: 'Daydream', system-ui, sans-serif;
   font-size: 16px;
-  margin-bottom: 4px;
+  margin-top: 25%;
 }
+
 
 ion-card-content p {
   font-size: 12px;
@@ -117,7 +113,32 @@ ion-card-content p {
   padding-left: 8px;
 }
 
-/* Botón Play estilo menú */
+.borrar {
+  width: 25px;              
+  height: 25px;             
+  min-height: 25px;
+
+  --background: #ff7d00;
+  --color: white;
+  --border-radius: 0;
+
+  box-shadow:
+    0px 0px 0px 2px #e07b1d,
+    0px 3px 0px 2px #b04d10;
+
+  font-size: 12px;
+
+  position: absolute;
+  right: 6px;
+  top: 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
 ion-card-content ion-button {
   width: 100%;
   --background: #ff7d00;
@@ -186,9 +207,4 @@ ion-modal ion-button:active {
   font-family: 'Daydream', system-ui, sans-serif;
   letter-spacing: 1px;
   animation: loading-blink 1.2s infinite;
-}
-
-@keyframes loading-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
 }

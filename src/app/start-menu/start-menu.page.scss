@@ -10,20 +10,7 @@ ion-grid {
   animation: dungeon-pulse 10s infinite alternate;
   background-size: 20px 20px; /* tamaño de los tiles */
 }
-@keyframes dungeon-pulse {
-  0% {
-    background-position: 0 0, 0 0;
-    filter: brightness(0.7);
-  }
-  50% {
-    background-position: 5px 5px, -5px -5px;
-    filter: brightness(1.2);
-  }
-  100% {
-    background-position: 10px 10px, -10px -10px;
-    filter: brightness(0.8);
-  }
-}
+
 
 
 ion-row{
@@ -201,15 +188,4 @@ ion-row{
   pointer-events: none;
   animation: pulse-warning 2s infinite;
   z-index: 2;
-}
-
-@keyframes pulse-warning {
-  0%, 100% {
-    opacity: 1;
-    transform: translateX(-50%) scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: translateX(-50%) scale(1.05);
-  }
 }

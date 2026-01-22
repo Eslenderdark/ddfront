@@ -25,10 +25,10 @@
       <!-- LISTADO DE PERSONAJES -->
       <ion-col size="6" size-md="3" *ngFor="let character of characters">
         <ion-card>
-          <ion-button *ngIf="character.alive" (click)="deleteCharacter(character)">
-            Delete
-          </ion-button>
           <ion-card-header>
+            <ion-button *ngIf="character.alive" class="borrar" (click)="deleteCharacter(character)">
+              x
+            </ion-button>
             <ion-card-title>{{ character.name }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
