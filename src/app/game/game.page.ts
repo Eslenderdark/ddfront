@@ -21,7 +21,7 @@ export class GamePage implements OnInit {
   public displayedText = '';
   public isTyping = false;
   public isLoading = false;
-  public typingSpeed = 20; 
+  public typingSpeed = 40; 
   public charId = Number(localStorage.getItem('selectedCharacterId'));
   public playerStats = {
     id: this.charId, 

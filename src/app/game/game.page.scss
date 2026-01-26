@@ -37,21 +37,17 @@
   letter-spacing: 0.5px;
 }
 
-/* Zona de narrativa IA */
 #ia_box {
-  width: 80%;
-  min-height: 450px;
-  max-height: 600px;
+  width: 50%;           /* más estrecho */
+  min-height: 750px;    /* más alto */
+  max-height: 750px;    /* más alto */
   overflow-y: auto;
   background-color: #f5f0e8;
-  padding: 24px;
-  border: none;
+  padding: 28px;        /* un pelín más de aire */
   border-radius: 6px;
   margin-bottom: 35px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
   gap: 10px;
   box-shadow:
     0px 0px 0px 3px #e07b1d,
@@ -59,13 +55,15 @@
     inset 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+
 .ia-text {
   color: #2c2416;
   font-family: 'VCR_OSD_MONO', monospace;
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 25px;      /* antes 14px */
+  line-height: 1.9;     /* un poco más cómodo de leer */
   white-space: pre-wrap;
 }
+
 
 .loading-text {
   color: #ff7d00;
