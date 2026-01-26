@@ -5,7 +5,7 @@
 </ion-header>
 
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true" class="ion-padding dungeon-bg">
   <p class="loading-text" *ngIf="isLoading">
     ⏳ Loading...
   </p>
@@ -26,7 +26,7 @@
       <ion-col size="6" size-md="3" *ngFor="let character of characters">
         <ion-card>
           <ion-card-header>
-            <ion-button *ngIf="character.alive" class="borrar" (click)="deleteCharacter(character)">
+            <ion-button class="borrar" (click)="deleteCharacter(character)">
               x
             </ion-button>
             <ion-card-title>{{ character.name }}</ion-card-title>

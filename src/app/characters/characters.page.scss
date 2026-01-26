@@ -5,9 +5,27 @@
   margin-left: 10px;
 }
 
+ion-toolbar{
+  --background: #1a1a1a;
+  box-shadow:
+    0px 0px 0px 0px #e07b1d,
+    0px 4px 0px 0px #b04d10;
+}
+
+
 #header-logo:hover {
   transform: scale(1.1); /* efecto hover ligero */
 }
+
+.dungeon-bg {
+  --background: 
+    repeating-linear-gradient(0deg, #222 0 2px, transparent 2px 20px),
+    repeating-linear-gradient(90deg, #222 0 2px, transparent 2px 20px),
+    #1a1a1a;
+
+  animation: dungeon-pulse 10s infinite alternate;
+}
+
 
 
 /* =========================== */
@@ -101,6 +119,7 @@ ion-card-header {
 
 ion-card-title {
   font-family: 'Daydream', system-ui, sans-serif;
+  color: white;
   font-size: 16px;
   margin-top: 25%;
 }
