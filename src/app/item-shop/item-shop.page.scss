@@ -71,7 +71,7 @@ ion-toolbar {
 
 .items-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 22px;
   padding: 0 24px 24px 24px;
   box-sizing: border-box;
@@ -79,7 +79,7 @@ ion-toolbar {
 
 @media (max-width: 1100px) {
   .items-list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

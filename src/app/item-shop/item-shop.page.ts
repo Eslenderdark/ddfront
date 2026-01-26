@@ -17,24 +17,38 @@ export class ItemShopPage implements OnInit {
   public items: any[] = [];
   public lastUpdate: Date = new Date();
   host_url = 'http://localhost:3000';
-
+  public infoUser: any;
   constructor(private router: Router, private http: HttpClient) { }
 
   ngOnInit() {
-    this.getItemsWeekly();
+    this.getItemsDaily();
   }
 
-  getItemsWeekly() {
+  getItemsDaily() {
     this.isLoading = true;
     this.http.get(this.host_url + '/item-shop').subscribe((data: any) => {
       this.items = data.items;
+      this.lastUpdate = new Date();
       console.log(this.items);
-      this.isLoading = false;
+      const userString = localStorage.getItem('user');
+      if (!userString) {
+        console.error('Usuario no encontrado en localStorage');
+        return;
+      }
+
+      const user = JSON.parse(userString);
+      this.http.get(this.host_url + `/users/${user.email}`).subscribe((data: any) => {
+        this.infoUser = data.user;
+        console.log('Información del usuario obtenida:', this.infoUser);
+        this.isLoading = false;
+
+      });
+
     });
   }
 
   buyItem(item: any) {
-    //logica compra
+    console.log('Comprando item:', item);
   }
 
   goToMenu() {
