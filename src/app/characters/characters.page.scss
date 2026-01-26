@@ -1,19 +1,37 @@
 #header-logo {
-  height: 80px;     
+  height: 80px;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
   margin-left: 10px;
 }
 
-#header-logo:hover {
-  transform: scale(1.1); /* efecto hover ligero */
+ion-toolbar {
+  --background: #1a1a1a;
+  box-shadow:
+    0px 0px 0px 0px #e07b1d,
+    0px 4px 0px 0px #b04d10;
 }
 
 
+#header-logo:hover {
+  transform: scale(1.1);
+  /* efecto hover ligero */
+}
+
+.dungeon-bg {
+  --background:
+    repeating-linear-gradient(0deg, #222 0 2px, transparent 2px 20px),
+    repeating-linear-gradient(90deg, #222 0 2px, transparent 2px 20px),
+    #1a1a1a;
+
+  animation: dungeon-pulse 10s infinite alternate;
+}
+
+
+
 /* =========================== */
-/* FONDO GENERAL DEL CONTENT */
 ion-content {
-  --background-color: #1e1e1e;
+  --background: #1e1e1e;
   --background-image:
     repeating-linear-gradient(0deg, #2a2a2a 0 2px, transparent 2px 20px),
     repeating-linear-gradient(90deg, #2a2a2a 0 2px, transparent 2px 20px);
@@ -21,14 +39,13 @@ ion-content {
   animation: dungeon-pulse 12s infinite alternate;
 }
 
-
 /* =========================== */
 /* TARJETA CREATE CHARACTER */
 .create-card {
   height: 240px;
   width: 180px;
 
-  --background-color: #2b2b2b;
+  --background: #2b2b2b;
   color: #ffa13b;
 
   display: flex;
@@ -71,7 +88,7 @@ ion-content {
 ion-col ion-card {
   height: 240px;
   width: 180px;
-  --background-color: #2b2b2b;
+  --background: #2b2b2b;
   color: #ffa13b;
 
   display: flex;
@@ -82,7 +99,8 @@ ion-col ion-card {
     0px 0px 0px 3px #e07b1d,
     0px 6px 0px 3px #b04d10;
 
-  border-radius: 6px; /* un pequeño redondeo */
+  border-radius: 6px;
+  /* un pequeño redondeo */
   transition: transform 0.08s ease-in-out, box-shadow 0.08s ease-in-out;
   cursor: pointer;
 }
@@ -101,6 +119,7 @@ ion-card-header {
 
 ion-card-title {
   font-family: 'Daydream', system-ui, sans-serif;
+  color: white;
   font-size: 16px;
   margin-top: 25%;
 }
@@ -114,8 +133,8 @@ ion-card-content p {
 }
 
 .borrar {
-  width: 25px;              
-  height: 25px;             
+  width: 25px;
+  height: 25px;
   min-height: 25px;
 
   --background: #ff7d00;
