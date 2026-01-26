@@ -17,12 +17,6 @@
   animation: dungeon-pulse 10s infinite alternate;
 }
 
-@keyframes dungeon-pulse {
-  0% { filter: brightness(0.8); }
-  50% { filter: brightness(1.1); }
-  100% { filter: brightness(0.9); }
-}
-
 /* Info del personaje */
 #characterinfo-div {
   align-self: flex-start;
@@ -45,9 +39,9 @@
 
 /* Zona de narrativa IA */
 #ia_box {
-  width: 90%;
-  min-height: 300px;
-  max-height: 400px;
+  width: 80%;
+  min-height: 450px;
+  max-height: 600px;
   overflow-y: auto;
   background-color: #f5f0e8;
   padding: 24px;

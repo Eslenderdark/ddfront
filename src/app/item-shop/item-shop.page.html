@@ -1,13 +1,37 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>item-shop</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">item-shop</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Header -->
+  <ion-toolbar>
+    <img src="../../assets/dungeon-logo.png" id="header-logo" (click)="goToMenu()" alt="Dungeon Logo" />
+  </ion-toolbar>
+
+
+  <p class="loading-text" *ngIf="isLoading">
+    Loading...
+  </p>
+
+  <div *ngIf="!isLoading">
+    <div class="shop-info">
+      <p class="shop-title">¡Descubre los objetos de la semana!</p>
+      <p class="shop-sub">Cada semana nuevos objetos</p>
+      <p class="update-date">Actualizado: {{ lastUpdate | date:'mediumDate' }}</p>
+    </div>
+
+    <div class="items-list">
+      <div class="item-card" *ngFor="let item of items">
+        <h2>{{ item.name }}</h2>
+        <p class="desc" [ngClass]="{'long': (item.descripcion?.length || 0) > 55}">{{ item.descripcion }}</p>
+        <div class="price-row">
+          <span class="price">{{ item.price }} gold</span>
+          <ion-button size="small" (click)="buyItem(item)">Comprar</ion-button>
+        </div>
+      </div>
+      <!-- Card de llamada a la acción si no hay items -->
+      <div class="item-card call-to-action" *ngIf="items.length === 0">
+        <h2>¡Vuelve pronto!</h2>
+        <p class="desc">La tienda se está reabasteciendo. Pronto habrá nuevos objetos para ti.</p>
+      </div>
+    </div>
+  </div>
+
 </ion-content>
