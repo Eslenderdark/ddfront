@@ -13,11 +13,11 @@
 /* =========================== */
 /* FONDO GENERAL DEL CONTENT */
 ion-content {
-  background-color: #1e1e1e;
-  background-image:
+  --background-color: #1e1e1e;
+  --background-image:
     repeating-linear-gradient(0deg, #2a2a2a 0 2px, transparent 2px 20px),
     repeating-linear-gradient(90deg, #2a2a2a 0 2px, transparent 2px 20px);
-  background-size: 20px 20px;
+  --background-size: 20px 20px;
   animation: dungeon-pulse 12s infinite alternate;
 }
 
@@ -28,7 +28,7 @@ ion-content {
   height: 240px;
   width: 180px;
 
-  background-color: #2b2b2b;
+  --background-color: #2b2b2b;
   color: #ffa13b;
 
   display: flex;
@@ -71,7 +71,7 @@ ion-content {
 ion-col ion-card {
   height: 240px;
   width: 180px;
-  background-color: #2b2b2b;
+  --background-color: #2b2b2b;
   color: #ffa13b;
 
   display: flex;

@@ -17,12 +17,6 @@
   animation: dungeon-pulse 10s infinite alternate;
 }
 
-@keyframes dungeon-pulse {
-  0% { filter: brightness(0.8); }
-  50% { filter: brightness(1.1); }
-  100% { filter: brightness(0.9); }
-}
-
 /* Info del personaje */
 #characterinfo-div {
   align-self: flex-start;
