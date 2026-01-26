@@ -174,10 +174,10 @@ ion-row{
   transform: translateX(-50%);
 
   font-size: 60%;
-  font-family: 'Daydream', system-ui, sans-serif;
   color: #333;
 
   background-color: rgba(255, 255, 255, 0.6);
+  font-family: 'VCR_OSD_MONO', monospace;
   padding: 4px 8px;
 
   border: 2px solid #555;
@@ -187,4 +187,13 @@ ion-row{
   animation: pulse-warning 2s infinite;
   z-index: 2;
 }
+
+.coming-soon{
+--ion-font-family: 'VCR_OSD_MONO'
+}
+
+h1 {
+  font-family: 'VCR_OSD_MONO', monospace;
+}
+
 

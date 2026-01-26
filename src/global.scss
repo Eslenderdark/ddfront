@@ -26,11 +26,17 @@
 @import "@ionic/angular/css/flex-utils.css";
 @font-face {
   font-family: 'VCR_OSD_MONO';
-  src: url('./assets/fonts/VCR_OSD_MONO_1.001.ttf') format('truetype');
+  src: url('/assets/fonts/VCR_OSD_MONO_1.001.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
+
+:root {
+  --ion-font-family: 'VCR_OSD_MONO', monospace;
+}
+
+
 
 /**
  * Ionic Dark Mode
