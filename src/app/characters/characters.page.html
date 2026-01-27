@@ -29,8 +29,17 @@
             <ion-button class="borrar" (click)="deleteCharacter(character)">
               x
             </ion-button>
+
             <ion-card-title>{{ character.name }}</ion-card-title>
+
+            <p class="race-text">{{ character.state.race }}</p>
+
+            <img class="character-img" [src]="'assets/character/' + character.state.race + '.png'"
+              [alt]="character.state.race" />
+
           </ion-card-header>
+
+
           <ion-card-content>
             <p>❤️ HP: {{ character.hp }}</p>
             <p>💪 STR: {{ character.strength }}</p>
