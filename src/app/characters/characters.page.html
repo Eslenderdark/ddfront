@@ -32,10 +32,8 @@
 
             <ion-card-title>{{ character.name }}</ion-card-title>
 
-            <!-- RAZA -->
             <p class="race-text">{{ character.state.race }}</p>
 
-            <!-- IMAGEN -->
             <img class="character-img" [src]="'assets/character/' + character.state.race.toLowerCase() + '.png'"
               [alt]="character.state.race" />
           </ion-card-header>
