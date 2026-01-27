@@ -15,40 +15,106 @@ import { HttpClient } from '@angular/common/http';
 export class ItemShopPage implements OnInit {
   public isLoading = false;
   public items: any[] = [];
-  public lastUpdate: Date = new Date();
+  lastUpdate = '';
   host_url = 'http://localhost:3000';
   public infoUser: any;
   constructor(private router: Router, private http: HttpClient) { }
-
+  //Date().toISOString().slice(0, 10);
   ngOnInit() {
-    this.getItemsDaily();
+    this.loadUserInfo();
+    this.checkAndLoadItems();
   }
 
-  getItemsDaily() {
-    this.isLoading = true;
-    this.http.get(this.host_url + '/item-shop').subscribe((data: any) => {
-      this.items = data.items;
-      this.lastUpdate = new Date();
-      console.log(this.items);
-      const userString = localStorage.getItem('user');
-      if (!userString) {
-        console.error('Usuario no encontrado en localStorage');
-        return;
-      }
+  loadUserInfo() {
+    const userString = localStorage.getItem('user');
+    if (!userString) {
+      console.error('Usuario no encontrado en localStorage');
+      return;
+    }
 
-      const user = JSON.parse(userString);
-      this.http.get(this.host_url + `/users/${user.email}`).subscribe((data: any) => {
+    const user = JSON.parse(userString);
+    this.http.get(this.host_url + `/users/${user.email}`).subscribe({
+      next: (data: any) => {
         this.infoUser = data.user;
         console.log('Información del usuario obtenida:', this.infoUser);
+      },
+      error: (error) => {
+        console.error('Error al obtener usuario:', error);
+      }
+    });
+  }
+
+  checkAndLoadItems() {
+    this.isLoading = true;
+
+    const savedDate = localStorage.getItem('itemShopDate');
+    const savedItems = localStorage.getItem('itemShopItems');
+    const today = new Date().toISOString().slice(0, 10);
+
+    if (savedDate && savedItems && savedDate === today) {
+      console.log('Usando items del caché (fecha: ' + savedDate + ')');
+      this.items = JSON.parse(savedItems);
+      this.lastUpdate = savedDate;
+      this.isLoading = false;
+    } else {
+      if (!savedDate) {
+        console.log('No hay caché, obteniendo items del servidor');
+      } else {
+        console.log('Fecha diferente (guardada: ' + savedDate + ', hoy: ' + today + '), actualizando items');
+      }
+      this.getItemsFromServer();
+    }
+  }
+
+  getItemsFromServer() {
+    this.http.get(this.host_url + '/item-shop').subscribe({
+      next: (data: any) => {
+        this.items = data.items;
+        this.lastUpdate = data.date;
+
+        localStorage.setItem('itemShopDate', data.date);
+        localStorage.setItem('itemShopItems', JSON.stringify(this.items));
+
+        console.log('Items actualizados desde el servidor (fecha: ' + data.date + ')');
         this.isLoading = false;
-
-      });
-
+      },
+      error: (error) => {
+        console.error('Error al obtener items:', error);
+        this.isLoading = false;
+      }
     });
   }
 
   buyItem(item: any) {
-    console.log('Comprando item:', item);
+    if (!this.infoUser) {
+      console.error('No hay información del usuario');
+      return;
+    }
+    
+    const purchaseData = {
+      userId: this.infoUser.id,
+      itemId: item.id,
+    };
+
+    console.log('Comprando item:', item.name);
+    
+    this.http.post(this.host_url + '/item-shop/', purchaseData).subscribe({
+      next: (response: any) => {
+        console.log('Compra exitosa:', response);
+        this.loadUserInfo();
+        alert(`¡Has comprado ${item.name}!`);
+      },
+      error: (error) => {
+        console.error('Error al comprar:', error);
+        if (error.status === 400) {
+          alert(error.error.message || 'Faltan parámetros, no hay monedas suficientes, o inventario lleno');
+        } else if (error.status === 404) {
+          alert(error.error.message || 'Usuario o ítem no encontrado');
+        } else {
+          alert('Error al realizar la compra');
+        }
+      }
+    });
   }
 
   goToMenu() {
