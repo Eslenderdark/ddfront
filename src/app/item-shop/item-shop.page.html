@@ -16,7 +16,11 @@
       <p class="update-date">Actualizado: {{ lastUpdate }}</p>
     </div>
 
-    <p *ngIf="infoUser"> gold: {{ infoUser.coins }}</p>
+    <div class="user-gold" *ngIf="infoUser">
+      <span class="gold-label">Gold:</span>
+      <span class="gold-amount">{{ infoUser.coins }}</span>
+      
+    </div>
 
     <div class="items-list">
       <div class="item-card" *ngFor="let item of items">
@@ -35,5 +39,40 @@
       </div>
     </div>
   </div>
+
+  <ion-modal [isOpen]="showCharacterModal" (didDismiss)="cancelPurchase()" class="character-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Selecciona un personaje</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="modal-content">
+          <p class="modal-description">
+            ¿A qué personaje quieres asignar <strong class="item-name">{{ selectedItem?.name }}</strong>?
+          </p>
+
+          <ion-list *ngIf="characters.length > 0" class="character-list">
+            <ion-item button *ngFor="let character of characters" (click)="selectCharacter(character)"
+              class="character-item" lines="full">
+              <ion-label>
+                <h2 class="character-name">{{ character.name }}</h2>
+                <p class="character-info">Nivel {{ character.level || 1 }} - {{ character.class || 'Aventurero' }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+
+          <p *ngIf="characters.length === 0" class="no-characters">
+            No tienes personajes disponibles
+          </p>
+
+          <ion-button expand="block" color="medium" (click)="cancelPurchase()" class="cancel-button">
+            Cancelar
+          </ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 
 </ion-content>

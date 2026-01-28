@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonToolbar, IonButton } from '@ionic/angular/standalone';
+import { IonContent, IonToolbar, IonButton, IonModal, IonHeader, IonTitle, IonList, IonItem, IonLabel, AlertController } from '@ionic/angular/standalone';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './item-shop.page.html',
   styleUrls: ['./item-shop.page.scss'],
   standalone: true,
-  imports: [IonButton, IonContent, IonToolbar, CommonModule, FormsModule, RouterModule]
+  imports: [IonButton, IonContent, IonToolbar, IonModal, IonHeader, IonTitle, IonList, IonItem, IonLabel, CommonModule, FormsModule, RouterModule]
 })
 export class ItemShopPage implements OnInit {
   public isLoading = false;
@@ -18,17 +18,27 @@ export class ItemShopPage implements OnInit {
   lastUpdate = '';
   host_url = 'http://localhost:3000';
   public infoUser: any;
-  constructor(private router: Router, private http: HttpClient) { }
-  //Date().toISOString().slice(0, 10);
+  public characters: any[] = [];
+  public selectedItem: any = null;
+  public showCharacterModal = false;
+
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private alertController: AlertController
+  ) { }
+
   ngOnInit() {
     this.loadUserInfo();
     this.checkAndLoadItems();
   }
 
   loadUserInfo() {
+    this.isLoading = true;
     const userString = localStorage.getItem('user');
     if (!userString) {
       console.error('Usuario no encontrado en localStorage');
+      this.isLoading = false;
       return;
     }
 
@@ -37,16 +47,35 @@ export class ItemShopPage implements OnInit {
       next: (data: any) => {
         this.infoUser = data.user;
         console.log('Información del usuario obtenida:', this.infoUser);
+        this.loadCharacters();
+        this.checkLoadingComplete();
       },
       error: (error) => {
         console.error('Error al obtener usuario:', error);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  loadCharacters() {
+    if (!this.infoUser || !this.infoUser.id) {
+      console.error('No hay información del usuario para cargar personajes');
+      return;
+    }
+
+    this.http.get(this.host_url + `/characters/user/${this.infoUser.id}`).subscribe({
+      next: (data: any) => {
+        this.characters = data.characters || data;
+        console.log('Personajes del usuario:', this.characters);
+      },
+      error: (error) => {
+        console.error('Error al obtener personajes:', error);
+        this.characters = [];
       }
     });
   }
 
   checkAndLoadItems() {
-    this.isLoading = true;
-
     const savedDate = localStorage.getItem('itemShopDate');
     const savedItems = localStorage.getItem('itemShopItems');
     const today = new Date().toISOString().slice(0, 10);
@@ -55,7 +84,7 @@ export class ItemShopPage implements OnInit {
       console.log('Usando items del caché (fecha: ' + savedDate + ')');
       this.items = JSON.parse(savedItems);
       this.lastUpdate = savedDate;
-      this.isLoading = false;
+      this.checkLoadingComplete();
     } else {
       if (!savedDate) {
         console.log('No hay caché, obteniendo items del servidor');
@@ -76,7 +105,7 @@ export class ItemShopPage implements OnInit {
         localStorage.setItem('itemShopItems', JSON.stringify(this.items));
 
         console.log('Items actualizados desde el servidor (fecha: ' + data.date + ')');
-        this.isLoading = false;
+        this.checkLoadingComplete();
       },
       error: (error) => {
         console.error('Error al obtener items:', error);
@@ -85,36 +114,106 @@ export class ItemShopPage implements OnInit {
     });
   }
 
+  checkLoadingComplete() {
+    if (this.items.length >= 0 && this.infoUser) {
+      this.isLoading = false;
+    }
+  }
+
   buyItem(item: any) {
     if (!this.infoUser) {
       console.error('No hay información del usuario');
+      alert('Error: no se encontró información del usuario');
       return;
     }
-    
+
+    if (!this.characters || this.characters.length === 0) {
+      alert('No tienes personajes. Crea uno primero desde el menú de personajes.');
+      return;
+    }
+
+    this.selectedItem = item;
+    this.showCharacterModal = true;
+  }
+
+  async selectCharacter(character: any) {
+    if (!this.selectedItem || !this.infoUser) {
+      return;
+    }
+
+    const alert = await this.alertController.create({
+      header: 'Confirmar compra',
+      message: `¿Asignar ${this.selectedItem.name} a ${character.name}?`,
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
+        },
+        {
+          text: 'Sí',
+          cssClass: 'alert-button-confirm',
+          handler: () => {
+            this.processPurchase(character);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async processPurchase(character: any) {
+    this.showCharacterModal = false;
+
     const purchaseData = {
       userId: this.infoUser.id,
-      itemId: item.id,
+      itemId: this.selectedItem.id,
+      characterId: character.id
     };
 
-    console.log('Comprando item:', item.name);
-    
+    const itemName = this.selectedItem.name;
+    this.selectedItem = null;
+
+    console.log('Procesando compra para personaje:', character.name);
+
     this.http.post(this.host_url + '/item-shop/', purchaseData).subscribe({
-      next: (response: any) => {
+      next: async (response: any) => {
         console.log('Compra exitosa:', response);
         this.loadUserInfo();
-        alert(`¡Has comprado ${item.name}!`);
+
+        const successAlert = await this.alertController.create({
+          header: '¡Compra exitosa!',
+          message: `Has comprado ${itemName} para ${character.name}`,
+          buttons: ['OK'],
+          cssClass: 'success-alert'
+        });
+        await successAlert.present();
       },
-      error: (error) => {
+      error: async (error) => {
         console.error('Error al comprar:', error);
+
+        let errorMessage = 'Error al realizar la compra';
         if (error.status === 400) {
-          alert(error.error.message || 'Faltan parámetros, no hay monedas suficientes, o inventario lleno');
+          errorMessage = error.error.message || 'No tienes suficiente oro o faltan parámetros';
         } else if (error.status === 404) {
-          alert(error.error.message || 'Usuario o ítem no encontrado');
-        } else {
-          alert('Error al realizar la compra');
+          errorMessage = error.error.message || 'Usuario, personaje o ítem no encontrado';
         }
+
+        const errorAlert = await this.alertController.create({
+          header: 'Error',
+          message: errorMessage,
+          buttons: ['OK'],
+          cssClass: 'error-alert'
+        });
+        await errorAlert.present();
       }
     });
+  }
+
+  cancelPurchase() {
+    this.showCharacterModal = false;
+    this.selectedItem = null;
   }
 
   goToMenu() {
