@@ -120,6 +120,26 @@ export class ItemShopPage implements OnInit {
     }
   }
 
+  refreshUserInfo() {
+    // Actualizar usuario sin activar el loading
+    const userString = localStorage.getItem('user');
+    if (!userString) {
+      console.error('Usuario no encontrado en localStorage');
+      return;
+    }
+
+    const user = JSON.parse(userString);
+    this.http.get(this.host_url + `/users/${user.email}`).subscribe({
+      next: (data: any) => {
+        this.infoUser = data.user;
+        console.log('Información del usuario actualizada:', this.infoUser);
+      },
+      error: (error) => {
+        console.error('Error al obtener usuario:', error);
+      }
+    });
+  }
+
   buyItem(item: any) {
     if (!this.infoUser) {
       console.error('No hay información del usuario');
@@ -180,12 +200,16 @@ export class ItemShopPage implements OnInit {
     this.http.post(this.host_url + '/item-shop/', purchaseData).subscribe({
       next: async (response: any) => {
         console.log('Compra exitosa:', response);
-        this.loadUserInfo();
 
         const successAlert = await this.alertController.create({
           header: '¡Compra exitosa!',
           message: `Has comprado ${itemName} para ${character.name}`,
-          buttons: ['OK'],
+          buttons: [{
+            text: 'OK',
+            handler: () => {
+              window.location.reload();
+            }
+          }],
           cssClass: 'success-alert'
         });
         await successAlert.present();
