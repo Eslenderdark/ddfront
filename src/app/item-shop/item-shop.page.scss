@@ -73,11 +73,11 @@ ion-toolbar {
 
 .user-gold {
   background: #232323;
-  border-left: 5px solid #ffd700;
   padding: 10px 18px;
   border-radius: 8px;
   margin: 0 18px 18px 18px;
   display: flex;
+  width: fit-content;
   align-items: center;
   gap: 8px;
 
@@ -88,7 +88,7 @@ ion-toolbar {
   }
 
   .gold-label {
-    font-size: 14px;
+    font-size: 18px;
     color: #ffa13b;
   }
 }
@@ -205,7 +205,7 @@ ion-button[size="small"]:active {
 }
 .character-modal {
   --background: rgba(0, 0, 0, 0.8);
-  font-family: 'VCR_OSD_MONO', monospace;
+  font-family: "VCR_OSD_MONO", monospace;
   ion-header ion-toolbar {
     --background: linear-gradient(135deg, #ff7d00, #ffa13b);
     --color: #fff;
@@ -213,7 +213,6 @@ ion-button[size="small"]:active {
 
   ion-content {
     --background: #1a1a1a;
-    
   }
 
   .modal-content {
@@ -227,12 +226,12 @@ ion-button[size="small"]:active {
     font-size: 16px;
     color: #fff;
     line-height: 1.5;
-    font-family: 'VCR_OSD_MONO', monospace !important;
+    font-family: "VCR_OSD_MONO", monospace !important;
 
     .item-name {
       color: #ffa13b;
       font-weight: bold;
-      font-family: 'VCR_OSD_MONO', monospace !important;
+      font-family: "VCR_OSD_MONO", monospace !important;
     }
   }
 
