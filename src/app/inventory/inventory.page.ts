@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector:'app-inventory',
@@ -11,6 +12,7 @@ import { FormsModule } from '@angular/forms';
     IonicModule,
     CommonModule,
     FormsModule,
+    RouterModule
   ],
   styleUrls:['./inventory.page.scss']
 })
@@ -21,7 +23,7 @@ export class InventoryPage implements OnInit{
   public url_host = 'http://localhost:3000/';
   public user_email: string = "";
 
-  constructor(private http:HttpClient){}
+  constructor(private http:HttpClient,private router: Router){}
 
   ngOnInit(){
     const userStr = localStorage.getItem('user');
@@ -70,8 +72,11 @@ export class InventoryPage implements OnInit{
 
   // Funciones de ejemplo para mostrar los items (puedes expandirlas)
   getItemsByCharacter(characterId: number) {
-    return this.items().filter(i => i.character_id === characterId);
+    return this.items().filter(item => item.character_id === characterId);
   }
 
+ goToMenu() {
+    this.router.navigate(['/start-menu']);
+  }
 }
 
