@@ -1,22 +1,53 @@
 <ion-content class="ion-padding">
 
+  <ion-toolbar>
+    <img
+      src="../../assets/dungeon-logo.png"
+      id="header-logo"
+      (click)="goToMenu()"
+      alt="Dungeon Logo"
+    />
+  </ion-toolbar>
+
+
   <h1>Inventario de tus personajes</h1>
 
-  <!-- Personajes -->
+  <!-- PERSONAJES -->
   <div *ngFor="let character of characters()" class="character-card">
-    <h2>{{ character.name }}</h2>
-    <p>HP: {{ character.hp }} | Str: {{ character.strength }} | Agi: {{ character.agility }} | Luck: {{ character.luck }}</p>
-    <p>Race: {{ character.state.race }} | Alive: {{ character.alive }}</p>
 
-    <!-- Items del personaje -->
+    <h2>{{ character.name }}</h2>
+    <p>
+      HP: {{ character.hp }} |
+      Str: {{ character.strength }} |
+      Agi: {{ character.agility }} |
+      Luck: {{ character.luck }}
+    </p>
+    <p>
+      Race: {{ character.state.race }} |
+      Alive: {{ character.alive }}
+    </p>
+
+    <!-- ITEMS DEL PERSONAJE -->
     <div class="items-container">
-      <div *ngFor="let item of getItemsByCharacter(character.id)" class="item-card">
+
+      <div
+        *ngFor="let item of getItemsByCharacter(character.id)"
+        class="item-card"
+      >
         <h3>{{ item.name }}</h3>
         <p>{{ item.description }}</p>
-        <p>Rareza: {{ item.rareza }} | Precio: {{ item.price }}</p>
+        <p>
+          Rareza: {{ item.rareza }} |
+          Precio: {{ item.price }}
+        </p>
       </div>
-    </div>
 
+      <!-- Sin items -->
+      <p *ngIf="getItemsByCharacter(character.id).length === 0">
+        👜 Este personaje no tiene objetos
+      </p>
+
+    </div>
   </div>
 
 </ion-content>

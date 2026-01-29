@@ -1,42 +1,112 @@
-ion-content{--background:white;}
-
-.inventory-grid{
-  padding:20px;
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:25px;
+:root {
+  --bg-dark: #0b0b0b;
+  --card-bg: #f0f0f0;
+  --orange-main: #ff7d00;
+  --orange-dark: #b65310;
+  --orange-border: #df7126;
+  --text-dark: #222;
 }
 
-.item-card{
-  background:#ff7d00;
-  padding:15px;
-  font-family:'Daydream',system-ui;
-  color:white;
+/* ===== Fondo global ===== */
+ion-content {
+  background: var(--bg-dark);
+  color: #ffffff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Daydream', system-ui, sans-serif;
+}
+
+/* ===== Logo ===== */
+#header-logo {
+  height: 80px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: transform 0.2s ease-in-out;
+}
+
+#header-logo:hover {
+  transform: scale(1.1);
+}
+
+/* ===== Loading ===== */
+.loading-text {
+  color: var(--orange-main);
+  font-size: 1.2em;
+  margin-top: 20px;
+}
+
+/* ===== Título ===== */
+h1 {
+  margin: 30px 0;
+  color: var(--orange-main);
+  text-align: center;
+  text-shadow: 2px 2px 0px #000;
+}
+
+/* ===== Tarjeta de personaje ===== */
+.character-card {
+  background: var(--card-bg);
+  color: var(--text-dark);
+  width: 90%;
+  max-width: 900px;
+  padding: 16px;
+  margin-bottom: 30px;
+
+  border-left: 6px solid var(--orange-main);
+  border-radius: 10px;
+
   box-shadow:
-  0 0 0 4px #df7126,
-  0 8px 0 4px #b65310;
+    0px 0px 0px 4px var(--orange-border),
+    0px 8px 0px 4px var(--orange-dark);
+
+  image-rendering: pixelated;
 }
 
-.item-img{
-  width:100%;
-  height:140px;
-  background:black;
-  border:3px solid white;
-  margin-bottom:10px;
-  object-fit:contain;
+.character-card h2 {
+  margin-bottom: 10px;
+  color: var(--orange-main);
+  text-shadow: 1px 1px 0px #000;
 }
 
-.action-btn{
-  width:100%;
-  background:#222;
-  color:white;
-  border:none;
-  padding:10px;
-  margin-top:5px;
+.character-card p {
+  font-size: 0.9em;
+  margin: 3px 0;
+}
+
+/* ===== Contenedor de items ===== */
+.items-container {
+  margin-top: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+/* ===== Tarjeta de item ===== */
+.item-card {
+  background: #ffffff;
+  padding: 10px;
+
+  border-left: 5px solid var(--orange-main);
+  border-radius: 8px;
+
   box-shadow:
-  0 0 0 3px #555,
-  0 6px 0 3px #111;
+    0px 0px 0px 3px var(--orange-border),
+    0px 6px 0px 3px var(--orange-dark);
+
+  font-family: 'Daydream', system-ui, sans-serif;
+  image-rendering: pixelated;
 }
-.action-btn:active{
-  transform:translateY(4px);
+
+.item-card h3 {
+  margin: 0 0 5px 0;
+  color: var(--orange-main);
+  font-size: 0.95em;
+}
+
+.item-card p {
+  font-size: 0.8em;
+  margin: 2px 0;
+  color: #333;
 }
