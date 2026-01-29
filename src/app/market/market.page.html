@@ -1,13 +1,57 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>market</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">market</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-toolbar>
+    <img src="../../assets/dungeon-logo.png" id="header-logo" (click)="goToMenu()" alt="Dungeon Logo" />
+  </ion-toolbar>
+
+
+  <p class="loading-text" *ngIf="isLoading">
+    Cargando items del mercado...
+  </p>
+
+  <div *ngIf="!isLoading">
+    <div class="market-info">
+      <h1 class="market-title">Mercado de Jugadores</h1>
+      <p class="market-description">Items en venta de otros aventureros</p>
+    </div>
+
+    <div class="user-gold" *ngIf="infoUser">
+      <span class="gold-label">Gold:</span>
+      <span class="gold-amount">{{ infoUser.coins }}</span>
+    </div>
+
+    <div class="items-list">
+      <div class="item-card" *ngFor="let item of itemsMarket">
+        <div class="item-header">
+          <h2>{{ item.name }}</h2>
+          <span class="rarity-badge" [ngClass]="item.rareza || 'común'">{{ item.rareza || 'común' }}</span>
+        </div>
+
+        <p class="desc" [ngClass]="{'long': (item.description?.length || 0) > 55}">{{ item.description }}</p>
+
+        <div class="item-stats" *ngIf="item.attack || item.defense || item.health">
+          <span *ngIf="item.attack" class="stat-badge attack">ATK: {{ item.attack }}</span>
+          <span *ngIf="item.defense" class="stat-badge defense">DEF: {{ item.defense }}</span>
+          <span *ngIf="item.health" class="stat-badge health">HP: {{ item.health }}</span>
+        </div>
+
+        <div class="seller-info">
+          <small>Vendedor: {{ item.seller_name || 'Aventurero' }}</small>
+        </div>
+
+        <div class="price-row">
+          <span class="price">{{ item.price || 100 }} gold</span>
+          <ion-button size="small" disabled>
+            Próximamente
+          </ion-button>
+        </div>
+      </div>
+
+      <div class="item-card call-to-action" *ngIf="itemsMarket.length === 0">
+        <h2>Mercado Vacío</h2>
+        <p class="desc">Aún no hay objetos en venta de otros jugadores. ¡Sé el primero en publicar!</p>
+      </div>
+    </div>
+  </div>
+
 </ion-content>
