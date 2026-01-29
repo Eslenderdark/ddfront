@@ -45,9 +45,9 @@
       </div>
 
       
-      <div class="menu-button disabled">
+      <div class="menu-button" [class.disabled]="!isLogged" (click)="goTo('inventory')">
         <h1>Inventory</h1>
-        <span class="coming-soon">Coming soon...</span>
+        <span  *ngIf="!isLogged" class="login-required">Login required</span>
       </div>
 
 

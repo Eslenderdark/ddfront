@@ -1,47 +1,22 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Inventario</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding">
 
-<ion-content>
+  <h1>Inventario de tus personajes</h1>
 
-<div class="inventory-grid">
+  <!-- Personajes -->
+  <div *ngFor="let character of characters()" class="character-card">
+    <h2>{{ character.name }}</h2>
+    <p>HP: {{ character.hp }} | Str: {{ character.strength }} | Agi: {{ character.agility }} | Luck: {{ character.luck }}</p>
+    <p>Race: {{ character.state.race }} | Alive: {{ character.alive }}</p>
 
-  <div class="item-card" *ngFor="let item of items">
-
-    <img [src]="item.image" class="item-img">
-
-    <div class="item-name">{{item.name}}</div>
-    <div class="item-rarity">{{item.rarity}}</div>
-    <div class="item-desc">{{item.description}}</div>
-
-    <ion-select placeholder="Asignar"
-      (ionChange)="assignItem(item,$event.detail.value)">
-      <ion-select-option 
-        *ngFor="let c of characters"
-        [value]="c.id">
-        {{c.name}}
-      </ion-select-option>
-    </ion-select>
-
-    <button class="action-btn"
-      (click)="sellItem(item)">
-      Vender ({{getSellPrice(item.rarity)}}💰)
-    </button>
-
-    <ion-input type="number"
-      placeholder="Precio mercado"
-      [(ngModel)]="item.marketPrice">
-    </ion-input>
-
-    <button class="action-btn"
-      (click)="publishMarket(item)">
-      Mercado
-    </button>
+    <!-- Items del personaje -->
+    <div class="items-container">
+      <div *ngFor="let item of getItemsByCharacter(character.id)" class="item-card">
+        <h3>{{ item.name }}</h3>
+        <p>{{ item.description }}</p>
+        <p>Rareza: {{ item.rareza }} | Precio: {{ item.price }}</p>
+      </div>
+    </div>
 
   </div>
-
-</div>
 
 </ion-content>
