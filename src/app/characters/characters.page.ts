@@ -128,7 +128,7 @@ export class CharactersPage implements OnInit {
         next: (res) => {
           // El backend DEBE devolver el personaje con id real
           console.log('Personaje creado con id:', res.character.id);
-          this.characters.push(res.character);
+          this.characters.unshift(res.character); // Ahora aparece al principio
           this.closeCreateModal();
           this.resetNewCharacterForm();
         },
@@ -154,7 +154,7 @@ export class CharactersPage implements OnInit {
 
   loadCharacters() {
     if (!this.userId) return;
-      this.isLoading = true;
+    this.isLoading = true;
     this.http.get<{ characters: CharacterPayload[] }>(`${this.host_url}/characters/user/${this.userId}`)
       .subscribe({
         next: (res) => {

@@ -1,8 +1,8 @@
 <ion-content [fullscreen]="true">
 
   <div style="position: absolute; top: 10px; right: 10px; z-index: 100; cursor: pointer;" (click)="toggleMute()">
-      <ion-icon name="volume-high-outline" *ngIf="!volumeMute" size="large" style="color: white;"></ion-icon>
-      <ion-icon name="volume-mute-outline" *ngIf="volumeMute" size="large" style="color: white;"></ion-icon>
+    <ion-icon name="volume-high-outline" *ngIf="!volumeMute" size="large" style="color: white;"></ion-icon>
+    <ion-icon name="volume-mute-outline" *ngIf="volumeMute" size="large" style="color: white;"></ion-icon>
   </div>
 
   <ion-grid id="menu-grid">
@@ -35,18 +35,19 @@
     <!-- FILA INFERIOR -->
     <ion-row class="menu-row1">
 
-      <div class="menu-button" (click)="goTo('item-shop')">
+      <div class="menu-button" [class.disabled]="!isLogged" (click)="goTo('item-shop')">
         <h1>Item Shop</h1>
+        <span *ngIf="!isLogged" class="login-required">Login required</span>
       </div>
 
       <div class="menu-button" (click)="handleAuth()">
         <h1>{{ isLogged ? 'Logout' : 'Login' }}</h1>
       </div>
 
-      
+
       <div class="menu-button" [class.disabled]="!isLogged" (click)="goTo('inventory')">
         <h1>Inventory</h1>
-        <span  *ngIf="!isLogged" class="login-required">Login required</span>
+        <span *ngIf="!isLogged" class="login-required">Login required</span>
       </div>
 
 

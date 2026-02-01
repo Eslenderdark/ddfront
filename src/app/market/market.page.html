@@ -11,7 +11,7 @@
 
   <div *ngIf="!isLoading">
     <div class="market-info">
-      <h1 class="market-title">Mercado de Jugadores</h1>
+      <h1 class="market-title">Mercado de Items</h1>
       <p class="market-description">Items en venta de otros aventureros</p>
     </div>
 
@@ -24,25 +24,22 @@
       <div class="item-card" *ngFor="let item of itemsMarket">
         <div class="item-header">
           <h2>{{ item.name }}</h2>
-          <span class="rarity-badge" [ngClass]="item.rareza || 'común'">{{ item.rareza || 'común' }}</span>
+          <span class="rarity-badge" [ngClass]="item.rareza">{{ item.rareza }}</span>
         </div>
 
-        <p class="desc" [ngClass]="{'long': (item.description?.length || 0) > 55}">{{ item.description }}</p>
-
-        <div class="item-stats" *ngIf="item.attack || item.defense || item.health">
-          <span *ngIf="item.attack" class="stat-badge attack">ATK: {{ item.attack }}</span>
-          <span *ngIf="item.defense" class="stat-badge defense">DEF: {{ item.defense }}</span>
-          <span *ngIf="item.health" class="stat-badge health">HP: {{ item.health }}</span>
-        </div>
+        <p class="desc">{{ item.description }}</p>
 
         <div class="seller-info">
-          <small>Vendedor: {{ item.seller_name || 'Aventurero' }}</small>
+          <span class="seller_name">Vendedor: {{ item.seller_name }}</span>
         </div>
 
         <div class="price-row">
-          <span class="price">{{ item.price || 100 }} gold</span>
-          <ion-button size="small" disabled>
-            Próximamente
+          <div class="price-block">
+            <span class="price market-price">{{ item.market_price }} gold</span>
+            <span class="base-price">Precio base: {{ item.price }} gold</span>
+          </div>
+          <ion-button size="small">
+            Comprar
           </ion-button>
         </div>
       </div>
