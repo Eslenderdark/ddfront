@@ -78,5 +78,13 @@ export class InventoryPage implements OnInit{
  goToMenu() {
     this.router.navigate(['/start-menu']);
   }
-}
+
+  venderitem(itemId: number) {
+    this.http.get<any>(`${this.url_host}sellitem/${itemId}`)
+      .subscribe(res => {
+        console.log('Item vendido:', res);
+        this.loadInventory(); // Recargar el inventario después de vender
+      });
+  }
+  }
 
