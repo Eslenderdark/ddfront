@@ -36,9 +36,9 @@
 >
   <div class="item-header">
     <h3>{{ item.name }}</h3>
-    <button class="sell-btn" (click)="sellitem(item)">
-      💰 Vender
-    </button>
+     <ion-button (click)="venderitem(item.id)">💰 Vender</ion-button>
+      
+    
   </div>
 
   <p>{{ item.description }}</p>
