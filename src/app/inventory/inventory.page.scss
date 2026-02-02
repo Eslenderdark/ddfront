@@ -100,13 +100,43 @@ h1 {
 }
 
 .item-card h3 {
-  margin: 0 0 5px 0;
-  color: var(--orange-main);
+  margin: 0;
+  color: #222;
   font-size: 0.95em;
+  text-shadow: 1px 1px 0px #ff7d00;
 }
+
 
 .item-card p {
   font-size: 0.8em;
   margin: 2px 0;
   color: #333;
+}
+
+.sell-btn {
+  background: var(--orange-main);
+  color: #000;
+  border: none;
+  padding: 4px 8px;
+
+  font-family: 'Daydream', system-ui, sans-serif;
+  font-size: 0.7em;
+
+  border-radius: 6px;
+  cursor: pointer;
+
+  box-shadow:
+    0px 0px 0px 2px var(--orange-border),
+    0px 3px 0px 2px var(--orange-dark);
+}
+
+.sell-btn:hover {
+  background: #ff9a3c;
+}
+
+.sell-btn:active {
+  transform: translateY(2px);
+  box-shadow:
+    0px 0px 0px 2px var(--orange-border),
+    0px 1px 0px 2px var(--orange-dark);
 }

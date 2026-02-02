@@ -31,20 +31,26 @@
     <div class="items-container">
 
       <div
-        *ngFor="let item of getItemsByCharacter(character.id)"
-        class="item-card"
-      >
-        <h3>{{ item.name }}</h3>
-        <p>{{ item.description }}</p>
-        <p>
-          Rareza: {{ item.rareza }} |
-          Precio: {{ item.price }}
-        </p>
-      </div>
+  *ngFor="let item of getItemsByCharacter(character.id)"
+  class="item-card"
+>
+  <div class="item-header">
+    <h3>{{ item.name }}</h3>
+    <button class="sell-btn" (click)="sellitem(item)">
+      💰 Vender
+    </button>
+  </div>
+
+  <p>{{ item.description }}</p>
+  <p>
+    Rareza: {{ item.rareza }} |
+    Precio: {{ item.price }}
+  </p>
+</div>
 
       <!-- Sin items -->
       <p *ngIf="getItemsByCharacter(character.id).length === 0">
-        👜 Este personaje no tiene objetos
+         Este personaje no tiene objetos
       </p>
 
     </div>
