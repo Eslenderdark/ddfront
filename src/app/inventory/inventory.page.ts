@@ -78,13 +78,26 @@ export class InventoryPage implements OnInit{
  goToMenu() {
     this.router.navigate(['/start-menu']);
   }
+sellitem(item: any) {
+  this.http.post(`${this.url_host}sellitem`, {
+    item,
+    email: this.user_email
+  }).subscribe({
+    next: () => {
+      // quitar el item vendido del signal
+      this.items.update(items =>
+        items.filter(i => i.id !== item.id)
+      );
+    },
+    error: err => {
+      console.error('Error vendiendo item', err);
+    }
+  });
+}
 
-  venderitem(itemId: number) {
-    this.http.get<any>(`${this.url_host}sellitem/${itemId}`)
-      .subscribe(res => {
-        console.log('Item vendido:', res);
-        this.loadInventory(); // Recargar el inventario después de vender
-      });
-  }
-  }
+
+}
+
+  
+  
 
