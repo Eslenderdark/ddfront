@@ -19,7 +19,7 @@
     <div class="user-gold" *ngIf="infoUser">
       <span class="gold-label">Gold:</span>
       <span class="gold-amount">{{ infoUser.coins }}</span>
-      
+
     </div>
 
     <div class="items-list">
@@ -58,7 +58,7 @@
               class="character-item" lines="full">
               <ion-label>
                 <h2 class="character-name">{{ character.name }}</h2>
-                <p class="character-info">Nivel {{ character.level || 1 }} - {{ character.class || 'Aventurero' }}</p>
+                <p class="character-info">{{ character.state.race }}</p>
               </ion-label>
             </ion-item>
           </ion-list>
