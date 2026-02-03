@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent } from '@ionic/angular/standalone';
@@ -13,19 +13,23 @@ import { StartMenuPage } from '../start-menu/start-menu.page';
   standalone: true,
   imports: [IonContent, RouterModule, CommonModule, FormsModule]
 })
-export class GamePage implements OnInit {
+export class GamePage implements OnInit, AfterViewChecked {
+
+  @ViewChild('iaBox') iaBoxRef!: ElementRef;
+
   constructor(private http: HttpClient, private router: Router) { }
   public url_host = 'http://localhost:3000/' // URL del host del servidor backend
   public response: any[] = [];// Array de las respuestas del servidor
-  public fullNarrative = ''; 
+  public fullNarrative = '';
   public displayedText = '';
+  private lastTextLength = 0;
   public isTyping = false;
   public isLoading = false;
-  public typingSpeed = 40; 
+  public typingSpeed = 40;
   public charId = Number(localStorage.getItem('selectedCharacterId'));
   public playerStats = {
-    id: this.charId, 
-    description: '', 
+    id: this.charId,
+    description: '',
     hp: '100',
     strength: '100',
     agility: '100',
@@ -40,58 +44,73 @@ export class GamePage implements OnInit {
     StartMenuPage.stopMenuMusic();
   }
 
+  ngAfterViewChecked() {
+    if (this.iaBoxRef && this.displayedText.length > this.lastTextLength) {
+      this.scrollToBottom();
+      this.lastTextLength = this.displayedText.length;
+    }
+  }
+
+  scrollToBottom() {
+    try {
+      const iaBox = this.iaBoxRef.nativeElement;
+      iaBox.scrollTop = iaBox.scrollHeight;
+    } catch (e) { }
+  }
+
 
   async recievePrompt() {
-  this.isLoading = true;
+    this.isLoading = true;
 
-  this.http.get(this.url_host + 'gemini/' + this.charId)
-    .subscribe(async (response: any) => {
-      this.playerStats = response.character;
-      this.isLoading = false;
-      await this.typeText(response.narrative + '\n\n');
-    });
-}
+    this.http.get(this.url_host + 'gemini/' + this.charId)
+      .subscribe(async (response: any) => {
+        this.playerStats = response.character;
+        this.isLoading = false;
+        await this.typeText(response.narrative + '\n\n');
+      });
+  }
 
 
 
   async sendPromptResponse(letterOption: string) {
-  if (this.isTyping || this.isLoading) return;
+    if (this.isTyping || this.isLoading) return;
 
-  this.isLoading = true;
+    this.isLoading = true;
 
-  this.http.get(this.url_host + 'geminiresponse/' + letterOption)
-    .subscribe(async (response: any) => {
+    this.http.get(this.url_host + 'geminiresponse/' + letterOption)
+      .subscribe(async (response: any) => {
 
-      console.log('Respuesta del servidor:', response);
+        console.log('Respuesta del servidor:', response);
 
-      this.playerStats.hp = response.hp;
-      this.playerStats.strength = response.strength;
-      this.playerStats.agility = response.agility;
-      this.playerStats.luck = response.luck;
+        this.playerStats.hp = response.hp;
+        this.playerStats.strength = response.strength;
+        this.playerStats.agility = response.agility;
+        this.playerStats.luck = response.luck;
 
 
-      this.isLoading = false;
-      
-      await this.typeText(
-        `\n\n👉 Elegiste ${letterOption}\n\n${response.response}\n\n`
+        this.isLoading = false;
+
+        await this.typeText(
+          `\n\n👉 Elegiste ${letterOption}\n\n${response.response}\n\n`
+        );
+
+        if (response.alive === false) {
+          this.playerStats.alive = false;
+          alert('💀 Has muerto en la aventura. Fin del juego. 💀');
+          //Navegar a otra pagina
+          this.router.navigate(['/start-menu']);
+          return;
+        }
+
+        if (response.run === false && response.alive === true) {
+          this.playerStats.run = false;
+          alert('Has completado tu mision con éxito. ¡Felicidades! Guerrero');
+          this.router.navigate(['/start-menu']);
+          return;
+        }
+      }
       );
-      
-      if (response.alive === false) {
-        this.playerStats.alive = false;
-        alert('💀 Has muerto en la aventura. Fin del juego. 💀');
-        //Navegar a otra pagina
-        this.router.navigate(['/start-menu']);
-        return;
-      }
-
-      if (response.run === false && response.alive === true) {
-        this.playerStats.run = false;
-        alert('Has completado tu mision con éxito. ¡Felicidades! Guerrero');
-        this.router.navigate(['/start-menu']);
-        return;
-      }
-      }
-    );}
+  }
 
   async typeText(text: string): Promise<void> {
     this.isTyping = true;

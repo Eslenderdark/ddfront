@@ -2,44 +2,43 @@
   <div id="game-container">
 
     <!-- Info del personaje -->
-    <div id="characterinfo-div">
+
+    <div id="characterinfo-div" class="fixed-stats left-stats">
       <h2 class="characterinfo-text">Vida: {{ playerStats.hp }}</h2>
       <h2 class="characterinfo-text">Fuerza: {{ playerStats.strength }}</h2>
       <h2 class="characterinfo-text">Agilidad: {{ playerStats.agility }}</h2>
       <h2 class="characterinfo-text">Suerte: {{ playerStats.luck }}</h2>
     </div>
-
     <!-- Zona de narrativa / IA -->
-<div id="ia_box">
-  <p class="ia-text">
-    {{ displayedText }}
-  </p>
+    <div id="ia_box" #iaBox>
+      <p class="ia-text">
+        {{ displayedText }}
+      </p>
 
-  <p class="loading-text" *ngIf="isLoading">
-    ⏳ Loading...
-  </p>
-</div>
+      <p class="loading-text" *ngIf="isLoading">
+        ⏳ Loading...
+      </p>
+    </div>
 
-<!-- Opciones -->
-<div class="options-box" *ngIf="!isTyping && !isLoading">
-  <div class="button-border">
-    <div class="button-base">
-      <button class="option-button" (click)="sendPromptResponse('A')">A</button>
+    <!-- Opciones -->
+    <div class="options-box" *ngIf="!isTyping && !isLoading">
+      <div class="button-border">
+        <div class="button-base">
+          <button class="option-button" (click)="sendPromptResponse('A')">A</button>
+        </div>
+      </div>
+      <div class="button-border">
+        <div class="button-base">
+          <button class="option-button" (click)="sendPromptResponse('B')">B</button>
+        </div>
+      </div>
+      <div class="button-border">
+        <div class="button-base">
+          <button class="option-button" (click)="sendPromptResponse('C')">C</button>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="button-border">
-    <div class="button-base">
-      <button class="option-button" (click)="sendPromptResponse('B')">B</button>
-    </div>
-  </div>
-  <div class="button-border">
-    <div class="button-base">
-      <button class="option-button" (click)="sendPromptResponse('C')">C</button>
-    </div>
-  </div>
-</div>
 
 
   </div>
 </ion-content>
-
