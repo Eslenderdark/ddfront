@@ -45,6 +45,8 @@
 
     <div class="items-list">
       <div class="item-card loot-box" *ngFor="let tier of ['Madera', 'Hierro', 'Esmeralda']">
+        <p class="xp-req" *ngIf="tier === 'Hierro'">Requisito: 500 XP</p>
+        <p class="xp-req" *ngIf="tier === 'Esmeralda'">Requisito: 1000 XP</p>
         <h2>Caja de Armas de {{ tier }}</h2>
         <div class="box-image-placeholder">
           <span class="img-temp">IMG</span> 
@@ -58,6 +60,8 @@
       </div>
 
       <div class="item-card loot-box" *ngFor="let tier of ['Madera', 'Hierro', 'Esmeralda']">
+        <p class="xp-req" *ngIf="tier === 'Hierro'">Requisito: 500 XP</p>
+        <p class="xp-req" *ngIf="tier === 'Esmeralda'">Requisito: 1000 XP</p>
         <h2>Caja de Armadura de {{ tier }}</h2>
         <div class="box-image-placeholder">
           <span class="img-temp">IMG</span>
@@ -71,6 +75,8 @@
       </div>
 
       <div class="item-card loot-box" *ngFor="let tier of ['Madera', 'Hierro', 'Esmeralda']">
+        <p class="xp-req" *ngIf="tier === 'Hierro'">Requisito: 500 XP</p>
+        <p class="xp-req" *ngIf="tier === 'Esmeralda'">Requisito: 1000 XP</p>
         <h2>Caja de Objetos de {{ tier }}</h2>
         <div class="box-image-placeholder">
           <span class="img-temp">IMG</span>

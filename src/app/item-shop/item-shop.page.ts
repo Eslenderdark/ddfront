@@ -185,8 +185,26 @@ export class ItemShopPage implements OnInit {
 
     await alert.present();
   }
-
+async presentErrorAlert(msg: string) {
+  const alert = await this.alertController.create({
+    header: 'Nivel Insuficiente',
+    message: msg,
+    buttons: ['OK']
+  });
+  await alert.present();
+}
 async processPurchase(character: any) {
+
+  if (this.selectedItem.isBox) {
+    if (this.selectedItem.tier === 'Hierro' && character.xp < 500) {
+      this.presentErrorAlert('Este personaje necesita 500 XP para abrir cofres de Hierro.');
+      return;
+    }
+    if (this.selectedItem.tier === 'Esmeralda' && character.xp < 1000) {
+      this.presentErrorAlert('Este personaje necesita 1000 XP para abrir cofres de Esmeralda.');
+      return;
+    }
+  }
   this.showCharacterModal = false;
   this.isGenerating = true;
 
