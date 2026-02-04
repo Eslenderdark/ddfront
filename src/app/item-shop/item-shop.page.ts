@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonToolbar, IonIcon, IonButton, IonModal, IonHeader, IonTitle, IonList, IonItem, IonLabel, AlertController } from '@ionic/angular/standalone';
+import { IonContent, IonToolbar, IonIcon, IonSpinner, IonButton, IonModal, IonHeader, IonTitle, IonList, IonItem, IonLabel, AlertController } from '@ionic/angular/standalone';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
@@ -10,9 +10,10 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './item-shop.page.html',
   styleUrls: ['./item-shop.page.scss'],
   standalone: true,
-  imports: [IonButton, IonContent, IonToolbar, IonIcon, IonModal, IonHeader, IonTitle, IonList, IonItem, IonLabel, CommonModule, FormsModule, RouterModule]
+  imports: [IonButton, IonContent, IonToolbar, IonSpinner, IonIcon, IonModal, IonHeader, IonTitle, IonList, IonItem, IonLabel, CommonModule, FormsModule, RouterModule]
 })
 export class ItemShopPage implements OnInit {
+  public isGenerating: boolean = false;
   public isLoading = false;
   public items: any[] = [];
   lastUpdate = '';
@@ -186,57 +187,42 @@ export class ItemShopPage implements OnInit {
   }
 
 async processPurchase(character: any) {
-    this.showCharacterModal = false;
+  this.showCharacterModal = false;
+  this.isGenerating = true;
 
-    const purchaseData: any = {
-      userId: this.infoUser.id,
-      characterId: character.id
-    };
+  const purchaseData: any = {
+    userId: this.infoUser.id,
+    characterId: character.id
+  };
 
-    if (this.selectedItem.isBox) {
-      purchaseData.price = this.selectedItem.price;
-      purchaseData.tier = this.selectedItem.tier;
-      purchaseData.boxType = this.selectedItem.boxType;
-      purchaseData.isBox = true;
-    } else {
-      purchaseData.itemId = this.selectedItem.id;
-    }
-
-    const itemName = this.selectedItem.name;
-    this.selectedItem = null;
-
-    console.log('Procesando compra y generación de item...', purchaseData);
-
-    this.http.post(this.host_url + '/item-shop', purchaseData).subscribe({
-      next: async (response: any) => {
-        console.log('Compra exitosa y objeto recibido:', response);
-
-        this.newItemGained = response.item;
-
-        this.showRewardModal = true;
-
-        this.refreshUserInfo();
-      },
-      error: async (error) => {
-        console.error('Error al procesar la compra:', error);
-
-        let errorMessage = 'Error al realizar la compra';
-        if (error.status === 400) {
-          errorMessage = error.error.message || 'No tienes suficiente oro o faltan parámetros';
-        } else if (error.status === 404) {
-          errorMessage = error.error.message || 'Usuario, personaje o ítem no encontrado';
-        }
-
-        const errorAlert = await this.alertController.create({
-          header: 'Error',
-          message: errorMessage,
-          buttons: ['OK'],
-          cssClass: 'error-alert'
-        });
-        await errorAlert.present();
-      }
-    });
+  if (this.selectedItem.isBox) {
+    purchaseData.price = this.selectedItem.price;
+    purchaseData.tier = this.selectedItem.tier;
+    purchaseData.boxType = this.selectedItem.boxType;
+    purchaseData.isBox = true;
+  } else {
+    purchaseData.itemId = this.selectedItem.id;
   }
+
+  this.http.post(this.host_url + '/item-shop', purchaseData).subscribe({
+    next: async (response: any) => {
+      this.newItemGained = response.item;
+      this.refreshUserInfo();
+      
+      this.isGenerating = false;
+      this.showRewardModal = true;
+    },
+    error: async (error) => {
+      this.isGenerating = false; 
+      const errorAlert = await this.alertController.create({
+        header: 'Error',
+        message: error.error?.message || 'Error en la comunicación',
+        buttons: ['OK']
+      });
+      await errorAlert.present();
+    }
+  });
+}
 
   closeRewardModal() {
     this.showRewardModal = false;

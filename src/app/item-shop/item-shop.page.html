@@ -119,11 +119,8 @@
       </ion-content>
     </ng-template>
   </ion-modal>
-  
 
-</ion-content>
-
-<ion-modal [isOpen]="showRewardModal" (didDismiss)="closeRewardModal()" class="reward-modal">
+  <ion-modal [isOpen]="showRewardModal" (didDismiss)="closeRewardModal()" class="reward-modal">
   <ng-template>
     <div class="reward-container">
       <div class="sparkles"></div>
@@ -150,3 +147,14 @@
     </div>
   </ng-template>
 </ion-modal>
+  
+<div class="loading-overlay" *ngIf="isGenerating">
+  <div class="loading-content">
+    <ion-spinner name="crescent" color="warning"></ion-spinner>
+    <p>Invocando el poder de la caja...</p>
+    <small>Generando objeto único...</small>
+  </div>
+</div>
+
+</ion-content>
+
