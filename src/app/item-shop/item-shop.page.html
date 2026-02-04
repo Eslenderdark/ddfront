@@ -38,6 +38,51 @@
         <p class="desc">La tienda se está reabasteciendo. Pronto habrá nuevos objetos para ti.</p>
       </div>
     </div>
+    <div class="shop-info box-section-title">
+      <p class="shop-title">Cofres de Suministros</p>
+      <p class="shop-sub">Prueba tu suerte con materiales de calidad</p>
+    </div>
+
+    <div class="items-list">
+      <div class="item-card loot-box" *ngFor="let tier of ['Madera', 'Hierro', 'Esmeralda']">
+        <h2>Caja de Armas de {{ tier }}</h2>
+        <div class="box-image-placeholder">
+          <span class="img-temp">IMG</span> 
+        </div>
+        <div class="price-row">
+          <ion-button size="small" (click)="buyBox('Arma', tier)" 
+            [disabled]="!infoUser || infoUser.coins < (tier === 'Madera' ? 35 : tier === 'Hierro' ? 75 : 125)">
+            {{ tier === 'Madera' ? 35 : tier === 'Hierro' ? 75 : 125 }} gold
+          </ion-button>
+        </div>
+      </div>
+
+      <div class="item-card loot-box" *ngFor="let tier of ['Madera', 'Hierro', 'Esmeralda']">
+        <h2>Caja de Armadura de {{ tier }}</h2>
+        <div class="box-image-placeholder">
+          <span class="img-temp">IMG</span>
+        </div>
+        <div class="price-row">
+          <ion-button size="small" (click)="buyBox('Armadura', tier)" 
+            [disabled]="!infoUser || infoUser.coins < (tier === 'Madera' ? 35 : tier === 'Hierro' ? 75 : 125)">
+            {{ tier === 'Madera' ? 35 : tier === 'Hierro' ? 75 : 125 }} gold
+          </ion-button>
+        </div>
+      </div>
+
+      <div class="item-card loot-box" *ngFor="let tier of ['Madera', 'Hierro', 'Esmeralda']">
+        <h2>Caja de Objetos de {{ tier }}</h2>
+        <div class="box-image-placeholder">
+          <span class="img-temp">IMG</span>
+        </div>
+        <div class="price-row">
+          <ion-button size="small" (click)="buyBox('Objeto', tier)" 
+            [disabled]="!infoUser || infoUser.coins < (tier === 'Madera' ? 35 : tier === 'Hierro' ? 75 : 125)">
+            {{ tier === 'Madera' ? 35 : tier === 'Hierro' ? 75 : 125 }} gold
+          </ion-button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <ion-modal [isOpen]="showCharacterModal" (didDismiss)="cancelPurchase()" class="character-modal">
@@ -74,5 +119,34 @@
       </ion-content>
     </ng-template>
   </ion-modal>
+  
 
 </ion-content>
+
+<ion-modal [isOpen]="showRewardModal" (didDismiss)="closeRewardModal()" class="reward-modal">
+  <ng-template>
+    <div class="reward-container">
+      <div class="sparkles"></div>
+      <h1 class="reward-title">¡OBJETO CONSEGUIDO!</h1>
+      
+      <div class="reward-card" [attr.data-rareza]="newItemGained?.rareza">
+        <div class="reward-rareza-tag">{{ newItemGained?.rareza }}</div>
+        <h2 class="reward-item-name">{{ newItemGained?.name }}</h2>
+        
+        <div class="reward-icon-container">
+          <ion-icon name="flashlight-outline"></ion-icon> 
+        </div>
+
+        <p class="reward-description">{{ newItemGained?.description }}</p>
+        
+        <div class="reward-footer">
+          <span>Valor: {{ newItemGained?.price }} gold</span>
+        </div>
+      </div>
+
+      <ion-button expand="block" color="warning" (click)="closeRewardModal()" class="claim-button">
+        RECOGER OBJETO
+      </ion-button>
+    </div>
+  </ng-template>
+</ion-modal>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonToolbar, IonButton, IonModal, IonHeader, IonTitle, IonList, IonItem, IonLabel, AlertController } from '@ionic/angular/standalone';
+import { IonContent, IonToolbar, IonIcon, IonButton, IonModal, IonHeader, IonTitle, IonList, IonItem, IonLabel, AlertController } from '@ionic/angular/standalone';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './item-shop.page.html',
   styleUrls: ['./item-shop.page.scss'],
   standalone: true,
-  imports: [IonButton, IonContent, IonToolbar, IonModal, IonHeader, IonTitle, IonList, IonItem, IonLabel, CommonModule, FormsModule, RouterModule]
+  imports: [IonButton, IonContent, IonToolbar, IonIcon, IonModal, IonHeader, IonTitle, IonList, IonItem, IonLabel, CommonModule, FormsModule, RouterModule]
 })
 export class ItemShopPage implements OnInit {
   public isLoading = false;
@@ -21,6 +21,8 @@ export class ItemShopPage implements OnInit {
   public characters: any[] = [];
   public selectedItem: any = null;
   public showCharacterModal = false;
+  public newItemGained: any = null;
+  public showRewardModal = false;
 
   constructor(
     private router: Router,
@@ -183,39 +185,40 @@ export class ItemShopPage implements OnInit {
     await alert.present();
   }
 
-  async processPurchase(character: any) {
+async processPurchase(character: any) {
     this.showCharacterModal = false;
 
-    const purchaseData = {
+    const purchaseData: any = {
       userId: this.infoUser.id,
-      itemId: this.selectedItem.id,
       characterId: character.id
     };
+
+    if (this.selectedItem.isBox) {
+      purchaseData.price = this.selectedItem.price;
+      purchaseData.tier = this.selectedItem.tier;
+      purchaseData.boxType = this.selectedItem.boxType;
+      purchaseData.isBox = true;
+    } else {
+      purchaseData.itemId = this.selectedItem.id;
+    }
 
     const itemName = this.selectedItem.name;
     this.selectedItem = null;
 
-    console.log('Procesando compra para personaje:', character.name);
+    console.log('Procesando compra y generación de item...', purchaseData);
 
-    this.http.post(this.host_url + '/item-shop/', purchaseData).subscribe({
+    this.http.post(this.host_url + '/item-shop', purchaseData).subscribe({
       next: async (response: any) => {
-        console.log('Compra exitosa:', response);
+        console.log('Compra exitosa y objeto recibido:', response);
 
-        const successAlert = await this.alertController.create({
-          header: '¡Compra exitosa!',
-          message: `Has comprado ${itemName} para ${character.name}`,
-          buttons: [{
-            text: 'OK',
-            handler: () => {
-              window.location.reload();
-            }
-          }],
-          cssClass: 'success-alert'
-        });
-        await successAlert.present();
+        this.newItemGained = response.item;
+
+        this.showRewardModal = true;
+
+        this.refreshUserInfo();
       },
       error: async (error) => {
-        console.error('Error al comprar:', error);
+        console.error('Error al procesar la compra:', error);
 
         let errorMessage = 'Error al realizar la compra';
         if (error.status === 400) {
@@ -235,6 +238,11 @@ export class ItemShopPage implements OnInit {
     });
   }
 
+  closeRewardModal() {
+    this.showRewardModal = false;
+    this.newItemGained = null;
+  }
+
   cancelPurchase() {
     this.showCharacterModal = false;
     this.selectedItem = null;
@@ -243,4 +251,33 @@ export class ItemShopPage implements OnInit {
   goToMenu() {
     this.router.navigate(['/start-menu']);
   }
+
+buyBox(type: string, tier: string) {
+  if (!this.infoUser) {
+    alert('Error: no se encontró información del usuario');
+    return;
+  }
+
+  if (!this.characters || this.characters.length === 0) {
+    alert('No tienes personajes disponibles.');
+    return;
+  }
+
+  let price = 0;
+  if (tier === 'Madera') price = 35;
+  else if (tier === 'Hierro') price = 75;
+  else if (tier === 'Esmeralda') price = 125;
+
+  this.selectedItem = {
+    name: `Caja de ${type} de ${tier}`,
+    price: price,
+    tier: tier,      
+    boxType: type,   
+    isBox: true      
+  };
+
+  this.showCharacterModal = true;
+}
+
+  
 }
