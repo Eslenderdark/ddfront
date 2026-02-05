@@ -9,7 +9,6 @@
     />
   </ion-toolbar>
 
-
   <h1>Inventario de tus personajes</h1>
 
   <!-- PERSONAJES -->
@@ -29,31 +28,21 @@
 
     <!-- ITEMS DEL PERSONAJE -->
     <div class="items-container">
-
-      <div
-  *ngFor="let item of getItemsByCharacter(character.id)"
-  class="item-card"
->
-  <div class="item-header">
-    <h3>{{ item.name }}</h3>
-     <ion-button (click)="venderitem(item.id)">💰 Vender</ion-button>
-      
-    
-  </div>
-
-  <p>{{ item.description }}</p>
-  <p>
-    Rareza: {{ item.rareza }} |
-    Precio: {{ item.price }}
-  </p>
-</div>
+      <div *ngFor="let item of getItemsByCharacter(character.id)" class="item-card">
+        <div class="item-header">
+          <h3>{{ item.name }}</h3>
+          <button class="sell-btn" (click)="venderitem(item.id)">💰 Vender</button>
+        </div>
+        <p>{{ item.description }}</p>
+        <p>Rareza: {{ item.rareza }} | Precio: {{ item.price }}</p>
+      </div>
 
       <!-- Sin items -->
       <p *ngIf="getItemsByCharacter(character.id).length === 0">
-         Este personaje no tiene objetos
+        Este personaje no tiene objetos
       </p>
-
     </div>
+
   </div>
 
 </ion-content>
