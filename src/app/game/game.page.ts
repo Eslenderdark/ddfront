@@ -26,7 +26,7 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
   constructor(
     private http: HttpClient,
     private router: Router,
-  ) {}
+  ) { }
   public url_host = 'http://localhost:3000/'; // URL del host del servidor backend
   public response: any[] = []; // Array de las respuestas del servidor
   public fullNarrative = '';
@@ -55,7 +55,7 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
     Misterio: 'assets/audio/game/misterio.mp3',
     Exploración: 'assets/audio/game/exploracion.mp3',
     Descanso: 'assets/audio/game/descanso.mp3',
-    Tensión: 'assets/audio/game/misterio.mp3',
+    Tensión: 'assets/audio/game/combate.mp3',
   };
 
   async ngOnInit() {
@@ -78,7 +78,7 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
     try {
       const iaBox = this.iaBoxRef.nativeElement;
       iaBox.scrollTop = iaBox.scrollHeight;
-    } catch (e) {}
+    } catch (e) { }
   }
 
   async recievePrompt() {
@@ -89,7 +89,8 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
       .subscribe(async (response: any) => {
         this.playerStats = response.character;
 
-        const musicCategory = await this.getMusicCategory();
+        // Pedir música ANTES de empezar a escribir
+        const musicCategory = await this.getMusicCategory(response.narrative);
         await this.changeMusic(musicCategory);
 
         this.isLoading = false;
@@ -112,14 +113,13 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
         this.playerStats.agility = response.agility;
         this.playerStats.luck = response.luck;
 
-        const musicCategory = await this.getMusicCategory();
+        const textToWrite = `\n\n👉 Elegiste ${letterOption}\n\n${response.response}\n\n`;
+        const musicCategory = await this.getMusicCategory(response.response);
         await this.changeMusic(musicCategory);
 
         this.isLoading = false;
 
-        await this.typeText(
-          `\n\n👉 Elegiste ${letterOption}\n\n${response.response}\n\n`,
-        );
+        await this.typeText(textToWrite);
 
         if (response.alive === false) {
           this.playerStats.alive = false;
@@ -159,10 +159,13 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
   }
 
 
-  async getMusicCategory(): Promise<string | null> {
+  async getMusicCategory(text?: string): Promise<string | null> {
     try {
+      const narrativeText = text || this.fullNarrative;
+      const narrative = encodeURIComponent(narrativeText);
+      console.log('Obteniendo categoría de música para el texto:', narrativeText.substring(0, 100) + '...');
       const response: any = await this.http
-        .get(this.url_host + 'music/' + this.charId)
+        .get(this.url_host + 'music/' + this.charId + '?narrative=' + narrative)
         .toPromise();
       return response.music;
     } catch (error) {
