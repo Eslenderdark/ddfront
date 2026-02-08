@@ -1,48 +1,107 @@
-<ion-content class="ion-padding">
+<ion-content>
 
   <ion-toolbar>
-    <img
-      src="../../assets/dungeon-logo.png"
-      id="header-logo"
-      (click)="goToMenu()"
-      alt="Dungeon Logo"
-    />
+    <img src="../../assets/dungeon-logo.png" id="header-logo" (click)="goToMenu()" alt="Dungeon Logo" />
   </ion-toolbar>
 
-  <h1>Inventario de tus personajes</h1>
+  <p class="loading-text" *ngIf="isLoading">
+    Cargando inventario...
+  </p>
 
-  <!-- PERSONAJES -->
-  <div *ngFor="let character of characters()" class="character-card">
-
-    <h2>{{ character.name }}</h2>
-    <p>
-      HP: {{ character.hp }} |
-      Str: {{ character.strength }} |
-      Agi: {{ character.agility }} |
-      Luck: {{ character.luck }}
-    </p>
-    <p>
-      Race: {{ character.state.race }} |
-      Alive: {{ character.alive }}
-    </p>
-
-    <!-- ITEMS DEL PERSONAJE -->
-    <div class="items-container">
-      <div *ngFor="let item of getItemsByCharacter(character.id)" class="item-card">
-        <div class="item-header">
-          <h3>{{ item.name }}</h3>
-          <button class="sell-btn" (click)="venderitem(item.id)">💰 Vender</button>
-        </div>
-        <p>{{ item.description }}</p>
-        <p>Rareza: {{ item.rareza }} | Precio: {{ item.price }}</p>
+  <div class="page-container" *ngIf="!isLoading">
+    <div class="inventory-header">
+      <div class="header-left">
+        <h1 class="inventory-title">Inventario de tus Personajes</h1>
+        <p class="inventory-description">Administra los objetos de tus aventureros</p>
       </div>
-
-      <!-- Sin items -->
-      <p *ngIf="getItemsByCharacter(character.id).length === 0">
-        Este personaje no tiene objetos
-      </p>
+      <div class="user-stats" *ngIf="infoUser">
+        <div class="user-stat-item">
+          <span>{{ infoUser.coins }} gold</span>
+        </div>
+        <div class="user-stat-item">
+          <span>{{ infoUser.xp }} XP</span>
+        </div>
+      </div>
     </div>
 
+    <div class="characters-container" *ngIf="characters.length > 0">
+      <div *ngFor="let character of characters" class="character-card">
+
+        <div class="character-header">
+          <div class="character-title-group">
+            <h2 class="character-name">{{ character.name }}</h2>
+            <span class="character-race">{{ character.state.race }}</span>
+          </div>
+          <div class="character-xp">
+            <span>{{ character.xp || 0 }} XP</span>
+          </div>
+        </div>
+
+        <div class="character-info-row">
+          <div class="character-stats">
+            <div class="stat-item">
+              <span class="stat-label">HP</span>
+              <span class="stat-value">{{ character.hp }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">STR</span>
+              <span class="stat-value">{{ character.strength }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">AGI</span>
+              <span class="stat-value">{{ character.agility }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">LUCK</span>
+              <span class="stat-value">{{ character.luck }}</span>
+            </div>
+          </div>
+          <div class="character-status">
+            <span class="status-badge" [ngClass]="{'alive': character.alive, 'dead': !character.alive}">
+              {{ character.alive ? 'VIVO' : 'MUERTO' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="items-divider">
+          <span>Objetos</span>
+        </div>
+
+        <div class="items-grid" *ngIf="getItemsByCharacter(character.id).length > 0">
+          <div *ngFor="let item of getItemsByCharacter(character.id)" class="item-card">
+            <div class="item-header">
+              <h4 class="item-name">{{ item.name }}</h4>
+              <span class="rarity-badge" [ngClass]="item.rareza">{{ item.rareza }}</span>
+            </div>
+
+            <p class="item-description">{{ item.description }}</p>
+
+            <div class="item-footer">
+              <span class="item-price">{{ item.price }} gold</span>
+            </div>
+
+            <div class="item-actions">
+              <ion-button size="small" fill="outline" (click)="venderitem(item.id)" class="quick-sell-btn">
+                Venta Rápida
+              </ion-button>
+              <ion-button size="small" (click)="publishMarket(item)" class="market-sell-btn">
+                Market
+              </ion-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="no-items" *ngIf="getItemsByCharacter(character.id).length === 0">
+          <p>Este personaje no tiene objetos</p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="no-characters" *ngIf="characters.length === 0">
+      <h2>No tienes personajes</h2>
+      <p>Crea un personaje para empezar tu aventura</p>
+    </div>
   </div>
 
 </ion-content>
