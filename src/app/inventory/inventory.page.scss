@@ -369,30 +369,59 @@ ion-toolbar {
 
 .item-actions {
   display: flex;
+  flex-direction: column;
   gap: 6px;
-  margin-top: 8px;
+  margin-top: 10px;
+  min-height: 110px;
+  justify-content: center;
 }
 
-ion-button.quick-sell-btn,
-ion-button.market-sell-btn {
+ion-button.action-btn {
   font-family: "VCR_OSD_MONO", monospace;
   font-size: 0.75em;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  flex: 1;
-  height: 34px;
+  height: 32px;
+  margin: 0;
+  width: 100%;
+
+  span {
+    font-size: 1em;
+  }
 }
 
 ion-button.quick-sell-btn {
-  --border-color: #666;
-  --color: #bbb;
+  --border-color: #888;
+  --color: #ccc;
   --background: transparent;
+
+  &:hover {
+    --background: rgba(136, 136, 136, 0.1);
+  }
 }
 
-ion-button.market-sell-btn {
+ion-button.transfer-btn {
+  --border-color: #4a90e2;
+  --color: #4a90e2;
+  --background: transparent;
+
+  &:hover {
+    --background: rgba(74, 144, 226, 0.1);
+  }
+}
+
+ion-button.market-btn {
   --background: #ff7d00;
   --background-hover: #ffa13b;
   --background-activated: #b04d10;
+  --color: #fff;
+}
+
+ion-button.remove-btn {
+  --background: #ff9800;
+  --background-hover: #ffa726;
+  --background-activated: #f57c00;
+  --color: #fff;
 }
 
 .no-items {
@@ -554,5 +583,85 @@ ion-button.market-sell-btn {
         content: "";
       }
     }
+  }
+}
+
+.character-modal {
+  --background: rgba(0, 0, 0, 0.8);
+  font-family: "VCR_OSD_MONO", monospace;
+
+  ion-header ion-toolbar {
+    --background: linear-gradient(135deg, #ff7d00, #ffa13b);
+    --color: #fff;
+  }
+
+  ion-content {
+    --background: #1a1a1a;
+  }
+
+  .modal-content {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .modal-description {
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.5;
+    font-family: "VCR_OSD_MONO", monospace !important;
+
+    .item-name {
+      color: #ffa13b;
+      font-weight: bold;
+      font-family: "VCR_OSD_MONO", monospace !important;
+    }
+  }
+
+  .character-list {
+    background: transparent;
+    margin-bottom: 20px;
+  }
+
+  .character-item {
+    --background: linear-gradient(135deg, #2b2b2b, #333);
+    --border-color: #ff7d00;
+    --border-width: 2px;
+    --border-radius: 10px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 8px rgba(255, 125, 0, 0.2);
+    transition: all 0.2s ease;
+
+    &:active {
+      transform: translateX(3px) scale(0.98);
+    }
+
+    .character-name {
+      color: #ffa13b;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .character-info {
+      color: #ccc;
+      font-size: 14px;
+    }
+  }
+
+  .no-characters {
+    text-align: center;
+    color: #888;
+    margin: 40px 20px;
+    font-size: 16px;
+  }
+
+  .cancel-button {
+    margin-top: 20px;
+    --background: #555;
+    --background-hover: #666;
   }
 }

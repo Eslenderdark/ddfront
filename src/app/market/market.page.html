@@ -38,8 +38,12 @@
             <span class="price market-price">{{ item.market_price }} gold</span>
             <span class="base-price">Precio base: {{ item.price }} gold</span>
           </div>
-          <ion-button size="small" (click)="buyItemMarket(item)">
+          <ion-button size="small" (click)="buyItemMarket(item)" *ngIf="item.seller_id !== infoUser?.id">
             Comprar
+          </ion-button>
+          <ion-button size="small" color="warning" (click)="removeFromMarket(item)"
+            *ngIf="item.seller_id === infoUser?.id">
+            Retirar
           </ion-button>
         </div>
       </div>

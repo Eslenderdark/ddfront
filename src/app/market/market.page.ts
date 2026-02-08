@@ -151,6 +151,57 @@ export class MarketPage implements OnInit {
 
 
 
+  async removeFromMarket(item: any) {
+    const alert = await this.alertController.create({
+      header: 'Retirar del Market',
+      message: `¿Quieres retirar ${item.name} del mercado?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
+        },
+        {
+          text: 'Retirar',
+          cssClass: 'alert-button-confirm',
+          handler: async () => {
+            this.isLoading = true;
+            try {
+              await this.http.post(`${this.host_url}/market/removeitem`, {
+                itemId: item.id,
+                sellerId: this.infoUser.id
+              }).toPromise();
+
+              const successAlert = await this.alertController.create({
+                header: '¡Retirado!',
+                message: `${item.name} ha sido retirado del mercado`,
+                buttons: [{ text: 'OK' }],
+                cssClass: 'success-alert'
+              });
+              await successAlert.present();
+
+              await this.getItemsMarket();
+              this.isLoading = false;
+            } catch (error: any) {
+              console.error('Error retirando item:', error);
+              const errorAlert = await this.alertController.create({
+                header: 'Error',
+                message: error.error?.message || 'No se pudo retirar el item del mercado',
+                buttons: ['OK'],
+                cssClass: 'error-alert'
+              });
+              await errorAlert.present();
+              this.isLoading = false;
+            }
+          }
+        }
+      ],
+      cssClass: 'custom-alert'
+    });
+
+    await alert.present();
+  }
+
   goToMenu() {
     this.router.navigate(['/start-menu']);
   }

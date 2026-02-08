@@ -47,15 +47,14 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
     run: true,
   };
 
-  // Sistema de música
   private currentMusic: HTMLAudioElement | null = null;
   private currentMusicCategory: string = '';
-  private musicMap: { [key: string]: string } = {
-    Combate: 'assets/audio/game/combate.mp3',
-    Misterio: 'assets/audio/game/misterio.mp3',
-    Exploración: 'assets/audio/game/exploracion.mp3',
-    Descanso: 'assets/audio/game/descanso.mp3',
-    Tensión: 'assets/audio/game/combate.mp3',
+  private musicMap: { [key: string]: string[] } = {
+    'Combate': ['assets/audio/game/Combate/combate.mp3', 'assets/audio/game/Combate/combate2.mp3'],
+    'Misterio': ['assets/audio/game/Misterio/misterio.mp3', 'assets/audio/game/Misterio/misterio2.mp3', 'assets/audio/game/Misterio/misterio3.mp3'],
+    'Exploración': ['assets/audio/game/Exploracion/exploracion.mp3', 'assets/audio/game/Exploracion/exploracion2.mp3'],
+    'Descanso': ['assets/audio/game/descanso/descanso.mp3', 'assets/audio/game/descanso/descanso2.mp3'],
+    'Tensión': ['assets/audio/game/Tension/tension.mp3', 'assets/audio/game/Tension/tension2.mp3'],
   };
 
   async ngOnInit() {
@@ -89,7 +88,6 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
       .subscribe(async (response: any) => {
         this.playerStats = response.character;
 
-        // Pedir música ANTES de empezar a escribir
         const musicCategory = await this.getMusicCategory(response.narrative);
         await this.changeMusic(musicCategory);
 
@@ -191,7 +189,7 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
       this.currentMusic = null;
     }
 
-    const musicPath = this.musicMap[category];
+    const musicPath = this.getRandomMusicPath(category);
 
     if (!musicPath) {
       console.warn('No hay archivo de música para la categoría:', category);
@@ -210,6 +208,17 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
     } catch (error) {
       console.error('Error reproduciendo música:', error);
     }
+  }
+
+  getRandomMusicPath(category: string): string | null {
+    const musicFiles = this.musicMap[category];
+
+    if (!musicFiles || musicFiles.length === 0) {
+      return null;
+    }
+
+    const randomIndex = Math.floor(Math.random() * musicFiles.length);
+    return musicFiles[randomIndex];
   }
 
   stopMusic() {

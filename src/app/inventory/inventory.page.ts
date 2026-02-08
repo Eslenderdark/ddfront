@@ -25,6 +25,9 @@ export class InventoryPage implements OnInit {
   public url_host = 'http://localhost:3000';
   public user_email: string = "";
   public isLoading = false;
+  public selectedItem: any = null;
+  public showTransferModal = false;
+  public availableCharacters: any[] = [];
 
 
   constructor(
@@ -51,7 +54,10 @@ export class InventoryPage implements OnInit {
   loadInventory() {
     this.isLoading = true;
 
-    if (!this.user_email) return;
+    if (!this.user_email) {
+      this.isLoading = false;
+      return;
+    }
 
     this.http.get(this.url_host + `/users/${this.user_email}`).subscribe({
       next: (data: any) => {
@@ -60,15 +66,22 @@ export class InventoryPage implements OnInit {
       },
       error: (error) => {
         console.error('Error al obtener usuario:', error);
+        this.isLoading = false;
       }
     });
 
     this.http.get<any>(`${this.url_host}/getcharactersbyemail/${this.user_email}`)
-      .subscribe(res => {
-        console.log('BACK RESPONSE:', res);
-        this.characters = res.characters;
-        this.items = res.items;
-        this.isLoading = false;
+      .subscribe({
+        next: (res) => {
+          console.log('BACK RESPONSE:', res);
+          this.characters = res.characters;
+          this.items = res.items;
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error al cargar inventario:', error);
+          this.isLoading = false;
+        }
       });
   }
 
@@ -194,6 +207,153 @@ export class InventoryPage implements OnInit {
     return this.items.filter(item => item.character_id === characterId);
   }
 
+  async removeFromMarket(item: any) {
+    const alert = await this.alertController.create({
+      header: 'Retirar del Market',
+      message: `¿Quieres retirar ${item.name} del mercado?`,
+      cssClass: 'custom-alert',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
+        },
+        {
+          text: 'Retirar',
+          cssClass: 'alert-button-confirm',
+          handler: () => {
+            this.http.post(`${this.url_host}/market/removeitem`, {
+              itemId: item.id,
+              sellerId: this.infoUser.id
+            })
+              .subscribe({
+                next: async (res) => {
+                  console.log('Item retirado del market:', res);
+                  const successAlert = await this.alertController.create({
+                    header: '¡Retirado!',
+                    message: `${item.name} ha sido retirado del mercado`,
+                    cssClass: 'custom-alert success-alert',
+                    buttons: [
+                      {
+                        text: 'OK',
+                        cssClass: 'alert-button-confirm'
+                      }
+                    ]
+                  });
+                  await successAlert.present();
+                  this.loadInventory();
+                },
+                error: async (err) => {
+                  console.error('Error retirando del market:', err);
+                  const errorAlert = await this.alertController.create({
+                    header: 'Error',
+                    message: err.error?.message || 'No se pudo retirar el item del mercado',
+                    cssClass: 'custom-alert error-alert',
+                    buttons: [
+                      {
+                        text: 'OK',
+                        cssClass: 'alert-button-confirm'
+                      }
+                    ]
+                  });
+                  await errorAlert.present();
+                }
+              });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  transferItem(item: any) {
+    this.selectedItem = item;
+    this.availableCharacters = this.characters.filter(c => c.id !== item.character_id);
+    this.showTransferModal = true;
+  }
+
+  async selectCharacterForTransfer(character: any) {
+    if (!this.selectedItem || !this.infoUser) {
+      return;
+    }
+
+    const alert = await this.alertController.create({
+      header: 'Confirmar transferencia',
+      message: `¿Transferir ${this.selectedItem.name} a ${character.name}?`,
+      cssClass: 'custom-alert',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'alert-button-cancel'
+        },
+        {
+          text: 'Sí',
+          cssClass: 'alert-button-confirm',
+          handler: () => {
+            this.processTransfer(character);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async processTransfer(character: any) {
+    this.showTransferModal = false;
+
+    try {
+      await this.http.post(`${this.url_host}/changeitem`, {
+        itemId: this.selectedItem.id,
+        fromCharacterId: this.selectedItem.character_id,
+        toCharacterId: character.id,
+        userId: this.infoUser.id
+      }).toPromise();
+
+      console.log('Item transferido exitosamente');
+
+      this.selectedItem = null;
+
+      const successAlert = await this.alertController.create({
+        header: '¡Transferido!',
+        message: `El item ha sido transferido a ${character.name}`,
+        cssClass: 'custom-alert success-alert',
+        buttons: [
+          {
+            text: 'OK',
+            cssClass: 'alert-button-confirm'
+          }
+        ]
+      });
+
+      await successAlert.present();
+      await successAlert.onDidDismiss();
+      window.location.reload();
+    } catch (error: any) {
+      console.error('Error transfiriendo item:', error);
+      this.selectedItem = null;
+
+      const errorAlert = await this.alertController.create({
+        header: 'Error',
+        message: error.error?.message || 'No se pudo transferir el item',
+        cssClass: 'custom-alert error-alert',
+        buttons: [
+          {
+            text: 'OK',
+            cssClass: 'alert-button-confirm'
+          }
+        ]
+      });
+      await errorAlert.present();
+    }
+  }
+
+  cancelTransfer() {
+    this.showTransferModal = false;
+    this.selectedItem = null;
+  }
 
   goToMenu() {
     this.router.navigate(['/start-menu']);
