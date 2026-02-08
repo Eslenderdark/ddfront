@@ -14,13 +14,14 @@ import { RouterModule, Router } from '@angular/router';
 })
 export class RankingPage implements OnInit {
 
-  constructor(private http: HttpClient, private router: Router) { }
   public url_host = 'http://localhost:3000/';
   public ranking: any[] = [];
   public isLoading = false;
 
+  constructor(private http: HttpClient, private router: Router) {}
+
   ngOnInit() {
-    this.getbestplayers()
+    this.getbestplayers();
   }
 
   getbestplayers() {
@@ -29,9 +30,36 @@ export class RankingPage implements OnInit {
       .subscribe(response => {
         this.ranking = response;
         this.isLoading = false;
-        console.log(this.ranking)
       });
   }
+
+getLevel(xp: number): number {
+  return Math.floor(xp / 100) + 1;
+}
+
+getTitle(xp: number): string {
+  const lvl = this.getLevel(xp);
+
+  if (lvl >= 30) return 'MYTHIC';
+  if (lvl >= 25) return 'IMMORTAL';
+  if (lvl >= 22) return 'DIVINE';
+  if (lvl >= 20) return 'LEGEND';
+
+  if (lvl >= 18) return 'MASTER';
+  if (lvl >= 16) return 'GRANDMASTER';
+  if (lvl >= 14) return 'HERO';
+
+  if (lvl >= 12) return 'ELITE';
+  if (lvl >= 10) return 'VETERAN';
+  if (lvl >= 8)  return 'WARRIOR';
+
+  if (lvl >= 6)  return 'ADVENTURER';
+  if (lvl >= 4)  return 'APPRENTICE';
+  if (lvl >= 2)  return 'NOVICE';
+
+  return 'RECRUIT';
+}
+
   goToMenu() {
     this.router.navigate(['/start-menu']);
   }

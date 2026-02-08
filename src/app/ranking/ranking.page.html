@@ -1,64 +1,78 @@
 <ion-content>
 
-  <!-- Header -->
   <ion-toolbar>
-    <img
-      src="../../assets/dungeon-logo.png"
-      id="header-logo"
-      (click)="goToMenu()"
-      alt="Dungeon Logo"
-    />
+    <img src="../../assets/dungeon-logo.png" id="header-logo" (click)="goToMenu()" alt="Dungeon Logo" />
   </ion-toolbar>
 
-  <p class="loading-text" *ngIf="isLoading">
-    ⏳ Loading...
-  </p>
-  <!-- ===== PODIO TOP 3 ===== -->
+  <p class="loading-text" *ngIf="isLoading">⏳ Loading...</p>
+
+  <!-- ===== PODIO ===== -->
   <div class="podio-container">
 
-    <!-- Plata -->
+    <!-- PLATA -->
     <div class="podio-column silver" *ngIf="ranking.length > 1">
-      <div class="player-card podium-card">
+      <div class="player-card podium-card runner-up">
         <p class="podio-rank">2</p>
+        <span class="rank-badge silver">{{ getTitle(ranking[1]?.xp) }}</span>
+
+        <img class="ranking-avatar podium-avatar" [src]="'assets/character/' + ranking[1]?.state.race + '.png'" />
+
         <p class="podio-name">{{ ranking[1]?.name }}</p>
-        <p class="podio-xp">{{ ranking[1]?.xp }} XP</p>
+        <p class="podio-xp">Lvl {{ getLevel(ranking[1]?.xp) }} · {{ ranking[1]?.xp }} XP</p>
+
+        <div class="xp-bar">
+          <div class="xp-fill" [style.width.%]="ranking[1]?.xp % 100"></div>
+        </div>
+
         <div class="player-stats">
-          <p>Race: {{ ranking[1]?.state.race }}</p>
-          <p>HP: {{ ranking[1]?.hp }} | Str: {{ ranking[1]?.strength }}</p>
-          <p>Agi: {{ ranking[1]?.agility }} | Luck: {{ ranking[1]?.luck }}</p>
-          <p>Alive: {{ ranking[1]?.alive }}</p>
+          <p>❤️ {{ ranking[1]?.hp }} | 💪 {{ ranking[1]?.strength }}</p>
+          <p>⚡ {{ ranking[1]?.agility }} | 🍀 {{ ranking[1]?.luck }}</p>
         </div>
       </div>
       <div class="podio-base silver"></div>
     </div>
 
-    <!-- Oro -->
+    <!-- ORO -->
     <div class="podio-column gold" *ngIf="ranking.length > 0">
-      <div class="player-card podium-card">
+      <div class="player-card podium-card champion">
         <p class="podio-rank">1</p>
+        <span class="rank-badge gold">{{ getTitle(ranking[0]?.xp) }}</span>
+
+        <img class="ranking-avatar podium-avatar" [src]="'assets/character/' + ranking[0]?.state.race + '.png'" />
+
         <p class="podio-name">{{ ranking[0]?.name }}</p>
-        <p class="podio-xp">{{ ranking[0]?.xp }} XP</p>
+        <p class="podio-xp">Lvl {{ getLevel(ranking[0]?.xp) }} · {{ ranking[0]?.xp }} XP</p>
+
+        <div class="xp-bar">
+          <div class="xp-fill" [style.width.%]="ranking[0]?.xp % 100"></div>
+        </div>
+
         <div class="player-stats">
-          <p>Race: {{ ranking[0]?.state.race }}</p>
-          <p>HP: {{ ranking[0]?.hp }} | Str: {{ ranking[0]?.strength }}</p>
-          <p>Agi: {{ ranking[0]?.agility }} | Luck: {{ ranking[0]?.luck }}</p>
-          <p>Alive: {{ ranking[0]?.alive }}</p>
+          <p>❤️ {{ ranking[0]?.hp }} | 💪 {{ ranking[0]?.strength }}</p>
+          <p>⚡ {{ ranking[0]?.agility }} | 🍀 {{ ranking[0]?.luck }}</p>
         </div>
       </div>
       <div class="podio-base gold"></div>
     </div>
 
-    <!-- Bronce -->
+    <!-- BRONCE -->
     <div class="podio-column bronze" *ngIf="ranking.length > 2">
-      <div class="player-card podium-card">
+      <div class="player-card podium-card third-place">
         <p class="podio-rank">3</p>
+        <span class="rank-badge bronze">{{ getTitle(ranking[2]?.xp) }}</span>
+
+        <img class="ranking-avatar podium-avatar" [src]="'assets/character/' + ranking[2]?.state.race + '.png'" />
+
         <p class="podio-name">{{ ranking[2]?.name }}</p>
-        <p class="podio-xp">{{ ranking[2]?.xp }} XP</p>
+        <p class="podio-xp">Lvl {{ getLevel(ranking[2]?.xp) }} · {{ ranking[2]?.xp }} XP</p>
+
+        <div class="xp-bar">
+          <div class="xp-fill" [style.width.%]="ranking[2]?.xp % 100"></div>
+        </div>
+
         <div class="player-stats">
-          <p>Race: {{ ranking[2]?.state.race }}</p>
-          <p>HP: {{ ranking[2]?.hp }} | Str: {{ ranking[2]?.strength }}</p>
-          <p>Agi: {{ ranking[2]?.agility }} | Luck: {{ ranking[2]?.luck }}</p>
-          <p>Alive: {{ ranking[2]?.alive }}</p>
+          <p>❤️ {{ ranking[2]?.hp }} | 💪 {{ ranking[2]?.strength }}</p>
+          <p>⚡ {{ ranking[2]?.agility }} | 🍀 {{ ranking[2]?.luck }}</p>
         </div>
       </div>
       <div class="podio-base bronze"></div>
@@ -66,20 +80,29 @@
 
   </div>
 
-  <!-- ===== RESTO DEL RANKING ===== -->
+
+  <!-- ===== RESTO ===== -->
   <div class="ranking-list">
-    <div
-      class="player-card"
-      *ngFor="let player of ranking.slice(3); let i = index"
-    >
+    <div class="player-card" *ngFor="let player of ranking.slice(3); let i = index">
+      <img class="ranking-avatar" [src]="'assets/character/' + player.state.race + '.png'" />
+
       <h2>#{{ i + 4 }} - {{ player.name }}</h2>
-      <span class="xp">XP: {{ player.xp }}</span>
+
+      <span class="rank-badge normal">
+        {{ getTitle(player.xp) }}
+      </span>
+
+      <p class="player-level">
+        Lvl {{ getLevel(player.xp) }} · {{ player.xp }} XP
+      </p>
+
+      <div class="xp-bar">
+        <div class="xp-fill" [style.width.%]="player.xp % 100"></div>
+      </div>
 
       <div class="player-stats">
-        <p>Race: {{ player.state.race }}</p>
-        <p>HP: {{ player.hp }} | Str: {{ player.strength }}</p>
-        <p>Agi: {{ player.agility }} | Luck: {{ player.luck }}</p>
-        <p>Alive: {{ player.alive }}</p>
+        <p>❤️ {{ player.hp }} | 💪 {{ player.strength }}</p>
+        <p>⚡ {{ player.agility }} | 🍀 {{ player.luck }}</p>
       </div>
     </div>
   </div>
