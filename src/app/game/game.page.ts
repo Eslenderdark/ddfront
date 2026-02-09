@@ -8,17 +8,20 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent } from '@ionic/angular/standalone';
+import { IonContent, IonIcon } from '@ionic/angular/standalone';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule, Router } from '@angular/router';
 import { StartMenuPage } from '../start-menu/start-menu.page';
+import { volumeHighOutline, volumeLowOutline } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
+
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.page.html',
   styleUrls: ['./game.page.scss'],
   standalone: true,
-  imports: [IonContent, RouterModule, CommonModule, FormsModule],
+  imports: [IonIcon, IonContent, RouterModule, CommonModule, FormsModule],
 })
 export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('iaBox') iaBoxRef!: ElementRef;
@@ -26,7 +29,9 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
   constructor(
     private http: HttpClient,
     private router: Router,
-  ) { }
+  ) {
+    addIcons({ volumeHighOutline, volumeLowOutline });
+  }
   public url_host = 'http://localhost:3000/'; // URL del host del servidor backend
   public response: any[] = []; // Array de las respuestas del servidor
   public fullNarrative = '';
@@ -49,6 +54,7 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
 
   private currentMusic: HTMLAudioElement | null = null;
   private currentMusicCategory: string = '';
+  public musicVolume: number = 0.4;
   private musicMap: { [key: string]: string[] } = {
     'Combate': ['assets/audio/game/Combate/combate.mp3', 'assets/audio/game/Combate/combate2.mp3'],
     'Misterio': ['assets/audio/game/Misterio/misterio.mp3', 'assets/audio/game/Misterio/misterio2.mp3', 'assets/audio/game/Misterio/misterio3.mp3'],
@@ -172,6 +178,51 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
+  async fadeOutMusic(duration: number = 1000): Promise<void> {
+    if (!this.currentMusic) return;
+    const audio = this.currentMusic;
+    const startVolume = audio.volume;
+    const step = 50;
+    const steps = duration / step;
+    const volumeStep = startVolume / steps;
+    return new Promise((resolve) => {
+      let currentStep = 0;
+      const fade = setInterval(() => {
+        if (audio.volume > volumeStep) {
+          audio.volume = Math.max(0, audio.volume - volumeStep);
+        } else {
+          audio.volume = 0;
+          clearInterval(fade);
+          resolve();
+        }
+        currentStep++;
+      }, step);
+    });
+  }
+
+  async fadeInMusic(duration: number = 3000): Promise<void> {
+    if (!this.currentMusic) return;
+    const audio = this.currentMusic;
+    const targetVolume = this.musicVolume;
+    audio.volume = 0;
+    const step = 50;
+    const steps = duration / step;
+    const volumeStep = targetVolume / steps;
+    return new Promise((resolve) => {
+      let currentStep = 0;
+      const fade = setInterval(() => {
+        if (audio.volume < targetVolume - volumeStep) {
+          audio.volume = Math.min(targetVolume, audio.volume + volumeStep);
+        } else {
+          audio.volume = targetVolume;
+          clearInterval(fade);
+          resolve();
+        }
+        currentStep++;
+      }, step);
+    });
+  }
+
   async changeMusic(category: string | null) {
     if (!category) {
       console.warn('No se recibió categoría de música');
@@ -184,6 +235,7 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
     }
 
     if (this.currentMusic) {
+      await this.fadeOutMusic(1000);
       this.currentMusic.pause();
       this.currentMusic.currentTime = 0;
       this.currentMusic = null;
@@ -199,11 +251,12 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
 
     this.currentMusic = new Audio(musicPath);
     this.currentMusic.loop = true;
-    this.currentMusic.volume = 0.4;
+    this.currentMusic.volume = 0;
 
     try {
       await this.currentMusic.play();
       this.currentMusicCategory = category;
+      await this.fadeInMusic(1000);
       console.log('Reproduciendo música:', category, '-', musicPath);
     } catch (error) {
       console.error('Error reproduciendo música:', error);
@@ -227,6 +280,13 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
       this.currentMusic.currentTime = 0;
       this.currentMusic = null;
       this.currentMusicCategory = '';
+    }
+  }
+
+  setMusicVolume(volume: number) {
+    this.musicVolume = volume;
+    if (this.currentMusic) {
+      this.currentMusic.volume = volume;
     }
   }
 }
