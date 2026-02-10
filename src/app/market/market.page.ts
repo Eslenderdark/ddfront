@@ -18,7 +18,7 @@ export class MarketPage implements OnInit {
   public itemsMarket: any[] = [];
   public isLoading = false;
   public infoUser: any;
-  host_url = 'http://localhost:3000';
+  host_url = 'https://dungeons-and-dragons-csm.web.app';
   public selectedItem: any = null;
   public characters: any[] = [];
   public showCharacterModal = false;
