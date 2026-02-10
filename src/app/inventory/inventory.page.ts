@@ -22,7 +22,7 @@ export class InventoryPage implements OnInit {
   characters: any[] = [];
   items: any[] = [];
   infoUser: any = null;
-  public url_host = 'https://dungeons-and-dragons-csm.web.app';
+  public url_host = 'https://ddungeon-back.onrender.com';
   public user_email: string = "";
   public isLoading = false;
   public selectedItem: any = null;

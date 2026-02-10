@@ -32,7 +32,7 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
   ) {
     addIcons({ volumeHighOutline, volumeLowOutline });
   }
-  public url_host = 'https://dungeons-and-dragons-csm.web.app/'; // URL del host del servidor backend
+  public url_host = 'https://ddungeon-back.onrender.com/'; // URL del host del servidor backend
   public response: any[] = []; // Array de las respuestas del servidor
   public fullNarrative = '';
   public displayedText = '';

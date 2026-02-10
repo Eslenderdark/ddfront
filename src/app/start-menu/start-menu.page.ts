@@ -23,7 +23,7 @@ import { volumeHighOutline, volumeMuteOutline } from 'ionicons/icons';
 })
 export class StartMenuPage implements OnInit {
   public user: any;
-  public host_url: string = 'https://dungeons-and-dragons-csm.web.app';
+  public host_url: string = 'https://ddungeon-back.onrender.com';
   public isLogged = false;
   private static audio: HTMLAudioElement | null = null;
   private static audioInitialized = false;

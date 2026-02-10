@@ -14,7 +14,7 @@ import { RouterModule, Router } from '@angular/router';
 })
 export class RankingPage implements OnInit {
 
-  public url_host = 'https://dungeons-and-dragons-csm.web.app/';
+  public url_host = 'https://ddungeon-back.onrender.com/';
   public ranking: any[] = [];
   public isLoading = false;
 

@@ -17,7 +17,7 @@ export class ItemShopPage implements OnInit {
   public isLoading = false;
   public items: any[] = [];
   lastUpdate = '';
-  host_url = 'https://dungeons-and-dragons-csm.web.app';
+  host_url = 'https://ddungeon-back.onrender.com';
   public infoUser: any;
   public characters: any[] = [];
   public selectedItem: any = null;

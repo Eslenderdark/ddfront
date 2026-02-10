@@ -62,7 +62,7 @@ export class CharactersPage implements OnInit {
   };
 
   characters: CharacterPayload[] = [];
-  host_url = 'https://dungeons-and-dragons-csm.web.app';
+  host_url = 'https://ddungeon-back.onrender.com';
   userId = '';
   luckboost = 0;
   public isLoading = false;
