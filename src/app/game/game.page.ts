@@ -117,6 +117,7 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
         this.playerStats.strength = response.strength;
         this.playerStats.agility = response.agility;
         this.playerStats.luck = response.luck;
+        this.playerStats.xp = response.xp;
 
         const textToWrite = `\n\n👉 Elegiste ${letterOption}\n\n${response.response}\n\n`;
         const musicCategory = await this.getMusicCategory(response.response);
