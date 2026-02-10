@@ -50,7 +50,8 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
     luck: '100',
     alive: true,
     run: true,
-  };
+    xp: '0'
+    };
 
   private currentMusic: HTMLAudioElement | null = null;
   private currentMusicCategory: string = '';
