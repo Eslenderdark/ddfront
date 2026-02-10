@@ -53,8 +53,7 @@
           <img [src]="'../../assets/cofre_' + tier.toLowerCase() + '.png'" [alt]="tier" class="box-img" />
         </div>
         <div class="price-row">
-          <ion-button size="small" (click)="buyBox('Arma', tier)"
-            [disabled]="!infoUser || infoUser.coins < (tier === 'Madera' ? 35 : tier === 'Hierro' ? 75 : 125)">
+          <ion-button size="small" (click)="buyBox('Arma', tier)" [disabled]="!canBuyBox(tier)">
             {{ tier === 'Madera' ? 35 : tier === 'Hierro' ? 75 : 125 }} gold
           </ion-button>
         </div>
@@ -69,8 +68,7 @@
           <img [src]="'../../assets/cofre_' + tier.toLowerCase() + '.png'" [alt]="tier" class="box-img" />
         </div>
         <div class="price-row">
-          <ion-button size="small" (click)="buyBox('Armadura', tier)"
-            [disabled]="!infoUser || infoUser.coins < (tier === 'Madera' ? 35 : tier === 'Hierro' ? 75 : 125)">
+          <ion-button size="small" (click)="buyBox('Armadura', tier)" [disabled]="!canBuyBox(tier)">
             {{ tier === 'Madera' ? 35 : tier === 'Hierro' ? 75 : 125 }} gold
           </ion-button>
         </div>
@@ -85,8 +83,7 @@
           <img [src]="'../../assets/cofre_' + tier.toLowerCase() + '.png'" [alt]="tier" class="box-img" />
         </div>
         <div class="price-row">
-          <ion-button size="small" (click)="buyBox('Objeto', tier)"
-            [disabled]="!infoUser || infoUser.coins < (tier === 'Madera' ? 35 : tier === 'Hierro' ? 75 : 125)">
+          <ion-button size="small" (click)="buyBox('Objeto', tier)" [disabled]="!canBuyBox(tier)">
             {{ tier === 'Madera' ? 35 : tier === 'Hierro' ? 75 : 125 }} gold
           </ion-button>
         </div>
@@ -106,8 +103,8 @@
               ¿A qué personaje quieres asignar <strong class="item-name">{{ selectedItem?.name }}</strong>?
             </p>
 
-            <ion-list *ngIf="characters.length > 0" class="character-list">
-              <ion-item button *ngFor="let character of characters" (click)="selectCharacter(character)"
+            <ion-list *ngIf="eligibleAliveCharacters.length > 0" class="character-list">
+              <ion-item button *ngFor="let character of eligibleAliveCharacters" (click)="selectCharacter(character)"
                 class="character-item" lines="full">
                 <ion-label>
                   <h2 class="character-name">{{ character.name }}</h2>
@@ -115,6 +112,9 @@
                 </ion-label>
               </ion-item>
             </ion-list>
+            <p *ngIf="eligibleAliveCharacters.length === 0" class="no-characters">
+              No tienes personajes vivos elegibles para este cofre.
+            </p>
 
             <p *ngIf="characters.length === 0" class="no-characters">
               No tienes personajes disponibles

@@ -10,8 +10,8 @@ import { RouterModule, Router } from '@angular/router';
   selector: 'app-inventory',
   templateUrl: './inventory.page.html',
   imports: [
-    IonicModule,
     CommonModule,
+    IonicModule,
     FormsModule,
     RouterModule
   ],
@@ -28,6 +28,14 @@ export class InventoryPage implements OnInit {
   public selectedItem: any = null;
   public showTransferModal = false;
   public availableCharacters: any[] = [];
+
+  get aliveCharactersCount() {
+    return this.characters?.filter(c => c.alive).length || 0;
+  }
+
+  get availableAliveCharacters() {
+    return this.availableCharacters?.filter(c => c.alive);
+  }
 
 
   constructor(

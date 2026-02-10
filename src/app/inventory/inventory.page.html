@@ -80,22 +80,31 @@
               <span class="item-price">{{ item.price }} gold</span>
             </div>
 
-            <div class="item-actions" *ngIf="!item.on_market">
-              <ion-button size="small" fill="outline" (click)="venderitem(item.id)" class="action-btn quick-sell-btn">
-                <span>Venta Rápida</span>
-              </ion-button>
-              <ion-button size="small" fill="outline" (click)="transferItem(item)" class="action-btn transfer-btn">
-                <span>Transferir</span>
-              </ion-button>
-              <ion-button size="small" (click)="publishMarket(item)" class="action-btn market-btn">
-                <span>Vender en Market</span>
-              </ion-button>
-            </div>
-            <div class="item-actions" *ngIf="item.on_market">
-              <ion-button size="small" color="warning" (click)="removeFromMarket(item)" class="action-btn remove-btn">
-                <span>Retirar del Market</span>
-              </ion-button>
-            </div>
+            <ng-container *ngIf="character.alive; else deadItemActions">
+              <div class="item-actions" *ngIf="!item.on_market">
+                <ion-button size="small" fill="outline" (click)="venderitem(item.id)" class="action-btn quick-sell-btn">
+                  <span>Venta Rápida</span>
+                </ion-button>
+                <ion-button *ngIf="aliveCharactersCount > 1" size="small" fill="outline" (click)="transferItem(item)"
+                  class="action-btn transfer-btn">
+                  <span>Transferir</span>
+                </ion-button>
+                <ion-button size="small" (click)="publishMarket(item)" class="action-btn market-btn">
+                  <span>Vender en Market</span>
+                </ion-button>
+              </div>
+              <div class="item-actions" *ngIf="item.on_market">
+                <ion-button size="small" color="warning" (click)="removeFromMarket(item)" class="action-btn remove-btn">
+                  <span>Retirar del Market</span>
+                </ion-button>
+              </div>
+            </ng-container>
+            <ng-template #deadItemActions>
+              <div class="item-actions">
+                <span style="color:#888; text-align:center; width:100%; font-size:0.95em;">No disponible (personaje
+                  muerto)</span>
+              </div>
+            </ng-template>
           </div>
         </div>
 
@@ -125,8 +134,8 @@
             ¿A qué personaje quieres transferir <strong class="item-name">{{ selectedItem?.name }}</strong>?
           </p>
 
-          <ion-list *ngIf="availableCharacters.length > 0" class="character-list">
-            <ion-item button *ngFor="let character of availableCharacters"
+          <ion-list *ngIf="availableAliveCharacters.length > 0" class="character-list">
+            <ion-item button *ngFor="let character of availableAliveCharacters"
               (click)="selectCharacterForTransfer(character)" class="character-item" lines="full">
               <ion-label>
                 <h2 class="character-name">{{ character.name }}</h2>
@@ -134,6 +143,9 @@
               </ion-label>
             </ion-item>
           </ion-list>
+          <p *ngIf="availableAliveCharacters.length === 0" class="no-characters">
+            No tienes personajes vivos disponibles para transferir
+          </p>
 
           <p *ngIf="availableCharacters.length === 0" class="no-characters">
             No tienes otros personajes disponibles para transferir

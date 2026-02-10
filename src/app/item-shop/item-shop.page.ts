@@ -25,6 +25,11 @@ export class ItemShopPage implements OnInit {
   public newItemGained: any = null;
   public showRewardModal = false;
 
+  public eligibleCharacters: any[] = [];
+  get eligibleAliveCharacters() {
+    return this.eligibleCharacters?.filter(c => c.alive);
+  }
+
   constructor(
     private router: Router,
     private http: HttpClient,
@@ -155,6 +160,7 @@ export class ItemShopPage implements OnInit {
       return;
     }
 
+    this.eligibleCharacters = [...this.characters];
     this.selectedItem = item;
     this.showCharacterModal = true;
   }
@@ -185,62 +191,62 @@ export class ItemShopPage implements OnInit {
 
     await alert.present();
   }
-async presentErrorAlert(msg: string) {
-  const alert = await this.alertController.create({
-    header: 'Nivel Insuficiente',
-    message: msg,
-    buttons: ['OK']
-  });
-  await alert.present();
-}
-async processPurchase(character: any) {
-
-  if (this.selectedItem.isBox) {
-    if (this.selectedItem.tier === 'Hierro' && character.xp < 500) {
-      this.presentErrorAlert('Este personaje necesita 500 XP para abrir cofres de Hierro.');
-      return;
-    }
-    if (this.selectedItem.tier === 'Esmeralda' && character.xp < 1000) {
-      this.presentErrorAlert('Este personaje necesita 1000 XP para abrir cofres de Esmeralda.');
-      return;
-    }
+  async presentErrorAlert(msg: string) {
+    const alert = await this.alertController.create({
+      header: 'Nivel Insuficiente',
+      message: msg,
+      buttons: ['OK']
+    });
+    await alert.present();
   }
-  this.showCharacterModal = false;
-  this.isGenerating = true;
+  async processPurchase(character: any) {
 
-  const purchaseData: any = {
-    userId: this.infoUser.id,
-    characterId: character.id
-  };
-
-  if (this.selectedItem.isBox) {
-    purchaseData.price = this.selectedItem.price;
-    purchaseData.tier = this.selectedItem.tier;
-    purchaseData.boxType = this.selectedItem.boxType;
-    purchaseData.isBox = true;
-  } else {
-    purchaseData.itemId = this.selectedItem.id;
-  }
-
-  this.http.post(this.host_url + '/item-shop', purchaseData).subscribe({
-    next: async (response: any) => {
-      this.newItemGained = response.item;
-      this.refreshUserInfo();
-      
-      this.isGenerating = false;
-      this.showRewardModal = true;
-    },
-    error: async (error) => {
-      this.isGenerating = false; 
-      const errorAlert = await this.alertController.create({
-        header: 'Error',
-        message: error.error?.message || 'Error en la comunicación',
-        buttons: ['OK']
-      });
-      await errorAlert.present();
+    if (this.selectedItem.isBox) {
+      if (this.selectedItem.tier === 'Hierro' && character.xp < 500) {
+        this.presentErrorAlert('Este personaje necesita 500 XP para abrir cofres de Hierro.');
+        return;
+      }
+      if (this.selectedItem.tier === 'Esmeralda' && character.xp < 1000) {
+        this.presentErrorAlert('Este personaje necesita 1000 XP para abrir cofres de Esmeralda.');
+        return;
+      }
     }
-  });
-}
+    this.showCharacterModal = false;
+    this.isGenerating = true;
+
+    const purchaseData: any = {
+      userId: this.infoUser.id,
+      characterId: character.id
+    };
+
+    if (this.selectedItem.isBox) {
+      purchaseData.price = this.selectedItem.price;
+      purchaseData.tier = this.selectedItem.tier;
+      purchaseData.boxType = this.selectedItem.boxType;
+      purchaseData.isBox = true;
+    } else {
+      purchaseData.itemId = this.selectedItem.id;
+    }
+
+    this.http.post(this.host_url + '/item-shop', purchaseData).subscribe({
+      next: async (response: any) => {
+        this.newItemGained = response.item;
+        this.refreshUserInfo();
+
+        this.isGenerating = false;
+        this.showRewardModal = true;
+      },
+      error: async (error) => {
+        this.isGenerating = false;
+        const errorAlert = await this.alertController.create({
+          header: 'Error',
+          message: error.error?.message || 'Error en la comunicación',
+          buttons: ['OK']
+        });
+        await errorAlert.present();
+      }
+    });
+  }
 
   closeRewardModal() {
     this.showRewardModal = false;
@@ -256,32 +262,52 @@ async processPurchase(character: any) {
     this.router.navigate(['/start-menu']);
   }
 
-buyBox(type: string, tier: string) {
-  if (!this.infoUser) {
-    alert('Error: no se encontró información del usuario');
-    return;
+  buyBox(type: string, tier: string) {
+    if (!this.infoUser) {
+      alert('Error: no se encontró información del usuario');
+      return;
+    }
+
+    if (!this.characters || this.characters.length === 0) {
+      alert('No tienes personajes disponibles.');
+      return;
+    }
+
+    let price = 0;
+    let requiredXP = 0;
+    if (tier === 'Madera') { price = 35; requiredXP = 0; }
+    else if (tier === 'Hierro') { price = 75; requiredXP = 500; }
+    else if (tier === 'Esmeralda') { price = 125; requiredXP = 1000; }
+
+    this.eligibleCharacters = this.characters.filter(char => (char.xp ?? 0) >= requiredXP);
+
+    if (this.eligibleCharacters.length === 0) {
+      alert('Ningún personaje cumple el requisito de XP para este cofre.');
+      return;
+    }
+
+    this.selectedItem = {
+      name: `Caja de ${type} de ${tier}`,
+      price: price,
+      tier: tier,
+      boxType: type,
+      isBox: true
+    };
+
+    this.showCharacterModal = true;
   }
 
-  if (!this.characters || this.characters.length === 0) {
-    alert('No tienes personajes disponibles.');
-    return;
+  canBuyBox(tier: string): boolean {
+    if (!this.infoUser || !this.characters || this.characters.length === 0) return false;
+    let price = 0;
+    let requiredXP = 0;
+    if (tier === 'Madera') { price = 35; requiredXP = 0; }
+    else if (tier === 'Hierro') { price = 75; requiredXP = 500; }
+    else if (tier === 'Esmeralda') { price = 125; requiredXP = 1000; }
+    if ((this.infoUser.coins ?? 0) < price) return false;
+    if (requiredXP === 0) return true;
+    return this.characters.some(char => (char.xp ?? 0) >= requiredXP);
   }
 
-  let price = 0;
-  if (tier === 'Madera') price = 35;
-  else if (tier === 'Hierro') price = 75;
-  else if (tier === 'Esmeralda') price = 125;
 
-  this.selectedItem = {
-    name: `Caja de ${type} de ${tier}`,
-    price: price,
-    tier: tier,      
-    boxType: type,   
-    isBox: true      
-  };
-
-  this.showCharacterModal = true;
-}
-
-  
 }

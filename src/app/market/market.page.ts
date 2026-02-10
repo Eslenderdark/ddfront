@@ -23,6 +23,10 @@ export class MarketPage implements OnInit {
   public characters: any[] = [];
   public showCharacterModal = false;
 
+  get aliveCharacters() {
+    return this.characters?.filter(c => c.alive);
+  }
+
   async ngOnInit() {
     this.isLoading = true;
     await this.loadUserInfo();
