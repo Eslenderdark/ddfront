@@ -43,6 +43,7 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
   public charId = Number(localStorage.getItem('selectedCharacterId'));
   public playerStats = {
     id: this.charId,
+    name: '',
     description: '',
     hp: '100',
     strength: '100',
@@ -50,7 +51,8 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
     luck: '100',
     alive: true,
     run: true,
-    xp: '0'
+    xp: '0',
+    coins: '0',
     };
 
   private currentMusic: HTMLAudioElement | null = null;
@@ -118,6 +120,8 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
         this.playerStats.agility = response.agility;
         this.playerStats.luck = response.luck;
         this.playerStats.xp = response.xp;
+        this.playerStats.coins = response.coins;
+        this.playerStats.name = response.name;
 
         const textToWrite = `\n\n👉 Elegiste ${letterOption}\n\n${response.response}\n\n`;
         const musicCategory = await this.getMusicCategory(response.response);
