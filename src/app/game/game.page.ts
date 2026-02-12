@@ -53,7 +53,7 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
     run: true,
     xp: '0',
     coins: '0',
-    };
+  };
 
   private currentMusic: HTMLAudioElement | null = null;
   private currentMusicCategory: string = '';
@@ -105,15 +105,14 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
       });
   }
 
+
   async sendPromptResponse(letterOption: string) {
     if (this.isTyping || this.isLoading) return;
-
     this.isLoading = true;
 
-    this.http
-      .get(this.url_host + 'geminiresponse/' + letterOption)
+    this.http.get(this.url_host + 'geminiresponse/' + letterOption)
       .subscribe(async (response: any) => {
-        console.log('Respuesta del servidor:', response);
+        // ... (tu lógica de asignación de stats se mantiene igual) ...
 
         this.playerStats.hp = response.hp;
         this.playerStats.strength = response.strength;
@@ -122,31 +121,25 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
         this.playerStats.xp = response.xp;
         this.playerStats.coins = response.coins;
         this.playerStats.name = response.name;
+        this.playerStats.alive = response.alive; 
+        this.playerStats.run = response.run;     
 
         const textToWrite = `\n\n👉 Elegiste ${letterOption}\n\n${response.response}\n\n`;
         const musicCategory = await this.getMusicCategory(response.response);
         await this.changeMusic(musicCategory);
 
         this.isLoading = false;
-
         await this.typeText(textToWrite);
 
-        if (response.alive === false) {
-          this.playerStats.alive = false;
+        // Si el juego termina, detenemos la música
+        if (this.playerStats.alive === false || this.playerStats.run === false) {
           this.stopMusic();
-          alert('💀 Has muerto en la aventura. Fin del juego. 💀');
-          this.router.navigate(['/start-menu']);
-          return;
-        }
-
-        if (response.run === false && response.alive === true) {
-          this.playerStats.run = false;
-          this.stopMusic();
-          alert('Has completado tu mision con éxito. ¡Felicidades! Guerrero');
-          this.router.navigate(['/start-menu']);
-          return;
         }
       });
+  }
+
+  goToMenu() {
+    this.router.navigate(['/start-menu']);
   }
 
   async typeText(text: string): Promise<void> {

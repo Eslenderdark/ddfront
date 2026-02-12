@@ -54,4 +54,24 @@
 
 
   </div>
+  <div class="end-game-overlay" *ngIf="!playerStats.alive || !playerStats.run">
+  <div class="end-game-card" [ngClass]="{'victory-border': !playerStats.run, 'death-border': !playerStats.alive}">
+    
+    <div *ngIf="!playerStats.run && playerStats.alive">
+      <h1 class="end-title victory-text">¡VICTORIA!</h1>
+      <p class="end-description">Has completado tu misión con éxito. ¡Felicidades, Guerrero!</p>
+    </div>
+
+    <div *ngIf="!playerStats.alive">
+      <h1 class="end-title death-text">HAS MUERTO</h1>
+      <p class="end-description">Tu aventura termina aquí. Las sombras reclaman tu alma...</p>
+    </div>
+
+    <div class="button-border menu-btn-container">
+      <div class="button-base">
+        <button class="option-button" (click)="goToMenu()">VOLVER AL MENÚ</button>
+      </div>
+    </div>
+  </div>
+</div>
 </ion-content>
