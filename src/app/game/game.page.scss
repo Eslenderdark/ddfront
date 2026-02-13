@@ -40,6 +40,10 @@
   letter-spacing: 1px; //mas grande
 }
 
+.characterinfo-title {
+  color: #ffa13b;
+}
+
 #ia_box {
   width: 50%;
   min-height: 600px;
@@ -136,6 +140,7 @@
   transform: translateY(0);
   background-color: #e66d00;
 }
+
 /* Overlay de fondo oscuro */
 .end-game-overlay {
   position: fixed;
@@ -160,7 +165,7 @@
   border-radius: 8px;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .death-border {
@@ -177,8 +182,13 @@
   margin-bottom: 20px;
 }
 
-.death-text { color: #ff4444; }
-.victory-text { color: #ffee83; }
+.death-text {
+  color: #ff4444;
+}
+
+.victory-text {
+  color: #ffee83;
+}
 
 .end-description {
   font-family: "VCR_OSD_MONO", monospace;
@@ -190,13 +200,20 @@
 
 .menu-btn-container {
   display: inline-block;
-  transform: scale(0.8); /* Un poco más pequeño para el modal */
+  transform: scale(0.8);
+  /* Un poco más pequeño para el modal */
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
+
 .end-buttons-container {
   display: flex;
   justify-content: center;
@@ -205,7 +222,8 @@
 }
 
 .small-btn {
-  transform: scale(0.7); /* Hacemos los botones un poco más pequeños para que quepan dos */
+  transform: scale(0.7);
+  /* Hacemos los botones un poco más pequeños para que quepan dos */
   transition: transform 0.2s;
 }
 
@@ -215,7 +233,8 @@
 
 /* Estilo para el botón secundario (Ver Log) */
 .option-button.secondary {
-  background-color: #4a4a4a; /* Color grisáceo para diferenciarlo */
+  background-color: #4a4a4a;
+  /* Color grisáceo para diferenciarlo */
   border-left-color: #888;
   border-top-color: #999;
   border-bottom-color: #222;
