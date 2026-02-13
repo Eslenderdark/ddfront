@@ -42,8 +42,8 @@
 
 #ia_box {
   width: 50%;
-  min-height: 750px;
-  max-height: 750px;
+  min-height: 600px;
+  max-height: 600px;
   overflow-y: auto;
   background-color: #f5f0e8;
   padding: 28px;
@@ -196,4 +196,33 @@
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+.end-buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.small-btn {
+  transform: scale(0.7); /* Hacemos los botones un poco más pequeños para que quepan dos */
+  transition: transform 0.2s;
+}
+
+.small-btn:hover {
+  transform: scale(0.75);
+}
+
+/* Estilo para el botón secundario (Ver Log) */
+.option-button.secondary {
+  background-color: #4a4a4a; /* Color grisáceo para diferenciarlo */
+  border-left-color: #888;
+  border-top-color: #999;
+  border-bottom-color: #222;
+  border-right-color: #333;
+  color: #ddd;
+}
+
+.option-button.secondary:hover {
+  background-color: #5a5a5a;
 }

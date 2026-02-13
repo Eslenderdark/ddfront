@@ -40,6 +40,7 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
   public isTyping = false;
   public isLoading = false;
   public typingSpeed = 40;
+  public showEndModal = false;
   public charId = Number(localStorage.getItem('selectedCharacterId'));
   public playerStats = {
     id: this.charId,
@@ -134,6 +135,7 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
         // Si el juego termina, detenemos la música
         if (this.playerStats.alive === false || this.playerStats.run === false) {
           this.stopMusic();
+          this.showEndModal = true;
         }
       });
   }
@@ -141,6 +143,10 @@ export class GamePage implements OnInit, AfterViewChecked, OnDestroy {
   goToMenu() {
     this.router.navigate(['/start-menu']);
   }
+
+  stayInGame() {
+  this.showEndModal = false;
+}
 
   async typeText(text: string): Promise<void> {
     this.isTyping = true;

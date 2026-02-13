@@ -1,8 +1,6 @@
 <ion-content [fullscreen]="true">
   <div id="game-container">
 
-    <!-- Info del personaje -->
-
     <div id="characterinfo-div" class="fixed-stats left-stats">
       <h1 class="characterinfo-title">{{ playerStats.name }}</h1>
       <h2 class="characterinfo-text">Vida: {{ playerStats.hp }}</h2>
@@ -11,10 +9,8 @@
       <h2 class="characterinfo-text">Suerte: {{ playerStats.luck }}</h2>
       <h2 class="characterinfo-text">Experiencia: {{ playerStats.xp }}</h2>
       <h2 class="characterinfo-text">Monedas: {{ playerStats.coins }}</h2>
-
-
     </div>
-    <!-- Zona de narrativa / IA -->
+
     <div id="ia_box" #iaBox>
       <p class="ia-text">
         {{ displayedText }}
@@ -25,8 +21,7 @@
       </p>
     </div>
 
-    <!-- Opciones -->
-    <div class="options-box" *ngIf="!isTyping && !isLoading">
+    <div class="options-box" *ngIf="!isTyping && !isLoading && playerStats.alive && playerStats.run">
       <div class="button-border">
         <div class="button-base">
           <button class="option-button" (click)="sendPromptResponse('A')">A</button>
@@ -44,34 +39,42 @@
       </div>
     </div>
 
-    <div
-      style="position: fixed; bottom: 24px; right: 24px; z-index: 1000; background: rgba(30,30,30,0.85); border-radius: 16px; padding: 8px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; align-items: center;">
+    <div style="position: fixed; bottom: 24px; right: 24px; z-index: 1000; background: rgba(30,30,30,0.85); border-radius: 16px; padding: 8px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); display: flex; align-items: center;">
       <ion-icon name="volume-low-outline"></ion-icon>
       <input type="range" min="0" max="1" step="0.01" [value]="musicVolume"
         (input)="setMusicVolume($event.target.valueAsNumber)" style="flex: 1;">
       <ion-icon name="volume-high-outline"></ion-icon>
     </div>
 
-
   </div>
-  <div class="end-game-overlay" *ngIf="!playerStats.alive || !playerStats.run">
-  <div class="end-game-card" [ngClass]="{'victory-border': !playerStats.run, 'death-border': !playerStats.alive}">
-    
-    <div *ngIf="!playerStats.run && playerStats.alive">
-      <h1 class="end-title victory-text">¡VICTORIA!</h1>
-      <p class="end-description">Has completado tu misión con éxito. ¡Felicidades, Guerrero!</p>
-    </div>
 
-    <div *ngIf="!playerStats.alive">
-      <h1 class="end-title death-text">HAS MUERTO</h1>
-      <p class="end-description">Tu aventura termina aquí. Las sombras reclaman tu alma...</p>
-    </div>
-
-    <div class="button-border menu-btn-container">
-      <div class="button-base">
-        <button class="option-button" (click)="goToMenu()">VOLVER AL MENÚ</button>
+  <div class="end-game-overlay" *ngIf="showEndModal">
+    <div class="end-game-card" [ngClass]="{'victory-border': !playerStats.run, 'death-border': !playerStats.alive}">
+      
+      <div *ngIf="!playerStats.run && playerStats.alive">
+        <h1 class="end-title victory-text">¡VICTORIA!</h1>
+        <p class="end-description">Has completado tu misión con éxito. ¡Felicidades, Guerrero!</p>
       </div>
+
+      <div *ngIf="!playerStats.alive">
+        <h1 class="end-title death-text">HAS MUERTO</h1>
+        <p class="end-description">Tu aventura termina aquí. Las sombras reclaman tu alma...</p>
+      </div>
+
+      <div class="end-buttons-container">
+        <div class="button-border small-btn">
+          <div class="button-base">
+            <button class="option-button" (click)="goToMenu()">MENÚ</button>
+          </div>
+        </div>
+
+        <div class="button-border small-btn">
+          <div class="button-base">
+            <button class="option-button secondary" (click)="showEndModal = false">VER LOG</button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-</div>
 </ion-content>
