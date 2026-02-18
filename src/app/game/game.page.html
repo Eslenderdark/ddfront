@@ -1,5 +1,7 @@
 <ion-content [fullscreen]="true">
   <div id="game-container">
+    
+    <div class="top-layout">
 
     <div id="characterinfo-div" class="fixed-stats left-stats">
       <h1 class="characterinfo-text">{{ playerStats.name }}</h1>
@@ -15,10 +17,10 @@
       <p class="ia-text">
         {{ displayedText }}
       </p>
-
       <p class="loading-text" *ngIf="isLoading">
         ⏳ Loading...
       </p>
+    </div>
     </div>
 
     <div class="options-box" *ngIf="!isTyping && !isLoading && playerStats.alive && playerStats.run">

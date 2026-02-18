@@ -17,16 +17,25 @@
   animation: dungeon-pulse 10s infinite alternate;
 }
 
+.top-layout {
+  display: flex;
+  flex-direction: row; /* Una al lado de la otra */
+  align-items: flex-start; /* Alineadas al borde superior */
+  justify-content: center; /* Centradas en la pantalla */
+  gap: 40px; /* Espacio entre la caja de stats y la de IA */
+  width: 100%;
+  max-width: 1200px; /* Opcional: para que no se separen demasiado en pantallas ultra anchas */
+  margin-top: 30px; 
+}
+
 /* Info del personaje */
 
-#characterinfo-div.fixed-stats.left-stats {
-  position: fixed;
-  top: 30px;
-  left: 40px;
-  z-index: 100;
+#characterinfo-div.stats-box {
+  /* Eliminamos position: fixed, top y left */
   background-color: #2b2b2b;
   padding: 16px 22px;
   border-radius: 8px;
+  min-width: 250px; /* Ancho consistente */
   box-shadow:
     0px 0px 0px 3px #e07b1d,
     0px 6px 0px 3px #b04d10;
@@ -45,15 +54,14 @@
 }
 
 #ia_box {
-  width: 50%;
+  width: 60%; /* Ajusta según prefieras */
   min-height: 500px;
   max-height: 500px;
   overflow-y: auto;
   background-color: #f5f0e8;
   padding: 28px;
   border-radius: 6px;
-  margin-top: 7px 0;
-  margin-bottom: 35px;
+  margin: 0; /* Quitamos márgenes que puedan moverlo */
   display: flex;
   flex-direction: column;
   gap: 10px;
